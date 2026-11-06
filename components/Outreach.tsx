@@ -167,12 +167,12 @@ export default function Outreach({ campaigns, gifts, ambassadors, texted, doNotT
                   <td className="r num">{money(p.lifetime)}</td>
                   <td>{p.amb || "—"}</td>
                   <td>{r.now ? <span className="pill ok">Gave {money(r.now)}</span> : stop ? <span className="pill off">Don&apos;t text</span> : t ? <span className="pill wait">Texted {t.slice(5)}</span> : <span className="pill wait" style={{ background: "var(--berry-soft)", color: "var(--berry)" }}>Not yet</span>}</td>
-                  <td style={{ display: "flex", gap: 5 }}>
+                  <td><div className="acts">
                     {!r.now && p.phone && !stop && <a className="btn sm" href={sms(p.phone, msg)} onClick={() => mark([p.key])}>Text</a>}
                     {!r.now && <button className="btn ghost sm" onClick={() => copy(msg)}>Copy message</button>}
                     {!r.now && t && <button className="btn ghost sm" onClick={() => mark([p.key], true)}>Unmark</button>}
                     {!r.now && <button className="btn ghost sm" title={stop ? "Allow texts again" : "Never text this person"} onClick={() => { const s = new Set(dnt); if (stop) s.delete(p.key); else s.add(p.key); setDnt(s); start(async () => { await setDoNotText(p.key, !stop); }); }}>{stop ? "Allow" : "Stop"}</button>}
-                  </td>
+                  </div></td>
                 </tr>
               );
             })}
@@ -203,10 +203,10 @@ export default function Outreach({ campaigns, gifts, ambassadors, texted, doNotT
                 <td className="num">{a.phone ? fmtPhone(a.phone) : "—"}</td>
                 {sameKind.map((c) => <td key={c.id} className="r num">{a.by[c.id] ? <>{money(a.by[c.id])}<div className="meta">{a.donors[c.id]} donors</div></> : <span className="meta">·</span>}</td>)}
                 <td>{a.joined ? <span className="pill ok">Signed up</span> : isTexted(a.key) ? <span className="pill wait">Invited {isTexted(a.key)!.slice(5)}</span> : <span className="pill off">Not yet</span>}</td>
-                <td style={{ display: "flex", gap: 5 }}>
+                <td><div className="acts">
                   {!a.joined && a.phone && <a className="btn sm" href={sms(a.phone, ambMsg(a))} onClick={() => mark([a.key])}>Text invite</a>}
                   {!a.joined && <button className="btn ghost sm" onClick={() => copy(ambMsg(a))}>Copy message</button>}
-                </td>
+                </div></td>
               </tr>
             ))}
           </tbody></table></div>

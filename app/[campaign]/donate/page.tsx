@@ -17,7 +17,7 @@ export default async function DonatePage({ params, searchParams }: { params: Pro
   }
   return (
     <main className="page wrap" style={{ maxWidth: 640 }}>
-      <div className="crumbs" style={{ color: "var(--muted)" }}><Link href={`/${c.slug}`}>{c.name}</Link></div>
+      <div className="crumbs"><Link href={`/${c.slug}`}>{c.name}</Link></div>
       <h1 className="section-h" style={{ marginTop: 6 }}>Make a donation</h1>
       <DonateForm
         campaign={{ slug: c.slug, name: c.name, match: c.match_multiplier, presets: c.preset_amounts }}

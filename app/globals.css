@@ -39,8 +39,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; padding-top: 26px; }
 .hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 5vw, 48px); line-height: 1.08; margin: 0 0 12px; text-wrap: balance; }
 .hero .lede { color: #d8d4c6; max-width: 58ch; margin: 0 0 16px; }
-.crumbs { font-size: 13px; color: var(--band-muted); margin-bottom: 8px; }
-.crumbs a { color: var(--band); }
+.crumbs { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.hero .crumbs { color: var(--band-muted); }
+.hero .crumbs a { color: var(--band); }
+.acts { display: flex; gap: 5px; }
 .cover { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 12px; margin-bottom: 18px; }
 .match-tag { display: inline-flex; gap: 8px; align-items: center; background: var(--gold); color: #1d1606; font-weight: 700; border-radius: 6px; padding: 6px 12px; font-size: 14px; }
 .photo-lg { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); margin-bottom: 14px; }
