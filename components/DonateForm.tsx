@@ -53,14 +53,13 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
     return "";
   };
 
-  async function payCard(e: React.FormEvent) {
-    e.preventDefault();
+  async function pay(method: "card" | "wallet" | "ach") {
     const problem = check();
     if (problem) return setErr(problem);
     setErr("");
     setBusy(true);
     try {
-      const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form()) });
+      const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form(), method }) });
       const j = await r.json();
       if (!r.ok || !j.url) throw new Error(j.error || "Something went wrong.");
       location.assign(j.url);
@@ -70,7 +69,18 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
     }
   }
 
-  // Chariot DAFpay: the button opens Chariot's window; on success we record the grant.
+  // Our DAF button opens Chariot's window by pressing Chariot's own (hidden) button.
+  function payDaf() {
+    const problem = check();
+    if (problem) return setErr(problem);
+    setErr("");
+    const el = chariotRef.current as (HTMLElement & { shadowRoot: ShadowRoot | null }) | null;
+    const inner = el?.shadowRoot?.querySelector("button") || el?.querySelector("button");
+    if (inner) (inner as HTMLButtonElement).click();
+    else setErr("DAF giving is still loading. Try again in a moment.");
+  }
+
+  // Chariot DAFpay: on success we record the grant.
   const formRef = useRef(form);
   formRef.current = form;
   const checkRef = useRef(check);
@@ -126,7 +136,7 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
     setF({ ...f, [k]: e.target.type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value });
 
   return (
-    <form className="panel" onSubmit={payCard} noValidate>
+    <form className="panel" onSubmit={(e) => { e.preventDefault(); pay("card"); }} noValidate>
       <div className="amts">
         {campaign.presets.map((p) => (
           <button type="button" key={p} className="opt num" aria-pressed={custom === "" && preset === p} onClick={() => { setPreset(p); setCustom(""); }}>
@@ -172,15 +182,34 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
       <label className="chk"><input type="checkbox" checked={f.coverFee} onChange={set("coverFee")} /> <span className="num">Add {money(fee || 0, true)} so the card fee doesn&apos;t come out of my gift</span></label>
       <div className="total num"><span>{plan === "once" ? "Total" : "Charged today"}</span><span>{money(perPayment + fee, true)}</span></div>
       {err && <p className="error" role="alert">{err}</p>}
-      <button className="btn wide" type="submit" disabled={busy || !(amount >= 1)}>{busy ? "One moment…" : "Pay by card, Apple Pay or bank"}</button>
+      <div className="pay-label">Choose how to pay</div>
+      <div className={"pay-grid" + (chariotCid ? "" : " three")}>
+        <button type="submit" className="pay-btn" data-method="card" disabled={busy || !(amount >= 1)}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5" /><path d="M2.5 9.5h19M6 15h4" /></svg>
+          <span>Credit card</span>
+        </button>
+        <button type="button" className="pay-btn" data-method="wallet" disabled={busy || !(amount >= 1)} onClick={() => pay("wallet")}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5" /><path d="M10.5 18.5h3" /></svg>
+          <span>Apple Pay / Google Pay</span>
+        </button>
+        <button type="button" className="pay-btn" data-method="ach" disabled={busy || !(amount >= 1)} onClick={() => pay("ach")}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5M4.5 10v8M9.5 10v8M14.5 10v8M19.5 10v8M3 20h18" /></svg>
+          <span>Bank transfer</span>
+        </button>
+        {chariotCid && (
+          <button type="button" className="pay-btn" data-method="daf" disabled={busy || !(amount >= 1)} onClick={payDaf}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+            <span>DAF: OJC, Donors&apos; Fund, Matbia &amp; more</span>
+          </button>
+        )}
+      </div>
+      {busy && <p className="meta" style={{ textAlign: "center" }}>One moment…</p>}
+      {chariotCid && plan === "installments" && <p className="meta" style={{ textAlign: "center" }}>DAF gifts go as one grant for the full amount.</p>}
+      {f.coverFee && <p className="meta" style={{ textAlign: "center" }}>DAF gifts have no card fee, so the fee isn&apos;t added to them.</p>}
       {chariotCid && (
-        <>
-          <div className="or">or give from a donor-advised fund: OJC, The Donors&apos; Fund, Matbia, Fidelity and more</div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <chariot-connect ref={chariotRef} id="chariot" cid={chariotCid} context="popup" theme="LightModeTheme" />
-          </div>
-          {plan === "installments" && <p className="meta" style={{ textAlign: "center" }}>DAF gifts go as one grant for the full amount.</p>}
-        </>
+        <div className="chariot-hidden" aria-hidden="true">
+          <chariot-connect ref={chariotRef} id="chariot" cid={chariotCid} context="popup" theme="LightModeTheme" />
+        </div>
       )}
     </form>
   );

@@ -43,10 +43,14 @@ export async function POST(req: Request) {
   const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [{ price_data: priceData(perPayment, lineName), quantity: 1 }];
   if (fee > 0) line_items.push({ price_data: priceData(fee, "Processing fee, covered by you"), quantity: 1 });
 
+  // Which button the donor pressed. Apple Pay and Google Pay show at the top of Stripe's card page on supported devices.
+  const body2 = parsed.v as typeof parsed.v & { method?: string };
+  const allowed_payment_method_types: Stripe.Checkout.SessionCreateParams.AllowedPaymentMethodType[] = body2.method === "ach" ? ["us_bank_account"] : ["card"];
   const back = `${SITE_URL}/${target.campaign.slug}/donate${v.ambassador ? `?a=${v.ambassador}` : v.team ? `?t=${v.team}` : ""}`;
   try {
     const session = await stripe().checkout.sessions.create({
       mode: recurring ? "subscription" : "payment",
+      allowed_payment_method_types,
       line_items,
       customer_email: v.email,
       ...(recurring ? { subscription_data: { metadata: meta } } : { submit_type: "donate", payment_intent_data: { metadata: meta } }),

@@ -13,6 +13,7 @@ export type DonateInput = {
   dedication?: string;
   message?: string;
   coverFee?: boolean;
+  method?: "card" | "wallet" | "ach";
 };
 
 export function validateDonate(body: unknown): { ok: true; v: DonateInput } | { ok: false; error: string } {
@@ -43,6 +44,7 @@ export function validateDonate(body: unknown): { ok: true; v: DonateInput } | { 
       dedication: s("dedication", 140) || undefined,
       message: s("message", 280) || undefined,
       coverFee: b.coverFee === true,
+      method: b.method === "ach" ? "ach" : b.method === "wallet" ? "wallet" : "card",
     },
   };
 }
