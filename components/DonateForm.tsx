@@ -1,0 +1,187 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { money } from "@/lib/format";
+
+type Props = {
+  campaign: { slug: string; name: string; match: number; presets: number[] };
+  ambassadors: { slug: string; name: string }[];
+  teams: { slug: string; name: string }[];
+  initialAmbassador: string;
+  initialTeam: string;
+  chariotCid: string;
+};
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace React.JSX {
+    interface IntrinsicElements {
+      "chariot-connect": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { cid?: string; context?: string; theme?: string };
+    }
+  }
+}
+
+const CHAI: Record<number, string> = { 36: "2× chai", 180: "10× chai", 360: "20× chai", 1800: "100× chai" };
+
+export default function DonateForm({ campaign, ambassadors, teams, initialAmbassador, initialTeam, chariotCid }: Props) {
+  const [preset, setPreset] = useState<number | null>(campaign.presets[1] ?? campaign.presets[0] ?? 180);
+  const [custom, setCustom] = useState("");
+  const [plan, setPlan] = useState<"once" | "monthly" | "installments">("once");
+  const [months, setMonths] = useState(12);
+  const [credit, setCredit] = useState(initialAmbassador ? "a:" + initialAmbassador : initialTeam ? "t:" + initialTeam : "");
+  const [f, setF] = useState({ name: "", email: "", phone: "", dedication: "", message: "", anonymous: false, coverFee: true });
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const chariotRef = useRef<HTMLElement | null>(null);
+
+  const amount = custom !== "" ? Math.round(Number(custom) * 100) / 100 : preset || 0;
+  const perPayment = plan === "installments" ? amount / months : amount;
+  const fee = f.coverFee ? Math.round(((perPayment + 0.3) / (1 - 0.029) - perPayment) * 100) / 100 : 0;
+
+  const form = () => ({
+    campaign: campaign.slug,
+    ambassador: credit.startsWith("a:") ? credit.slice(2) : "",
+    team: credit.startsWith("t:") ? credit.slice(2) : "",
+    amount,
+    plan,
+    months,
+    ...f,
+  });
+  const check = () => {
+    if (!(amount >= 1)) return "Choose or enter an amount.";
+    if (!f.name.trim()) return "Enter your name for the receipt.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) return "Enter a valid email for the receipt.";
+    return "";
+  };
+
+  async function payCard(e: React.FormEvent) {
+    e.preventDefault();
+    const problem = check();
+    if (problem) return setErr(problem);
+    setErr("");
+    setBusy(true);
+    try {
+      const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form()) });
+      const j = await r.json();
+      if (!r.ok || !j.url) throw new Error(j.error || "Something went wrong.");
+      location.assign(j.url);
+    } catch (x) {
+      setErr((x as Error).message);
+      setBusy(false);
+    }
+  }
+
+  // Chariot DAFpay: the button opens Chariot's window; on success we record the grant.
+  const formRef = useRef(form);
+  formRef.current = form;
+  const checkRef = useRef(check);
+  checkRef.current = check;
+  useEffect(() => {
+    if (!chariotCid) return;
+    const s = document.createElement("script");
+    s.src = "https://cdn.givechariot.com/chariot-connect.umd.js";
+    s.async = true;
+    document.body.appendChild(s);
+    const el = chariotRef.current as (HTMLElement & { onDonationRequest?: (fn: () => Promise<unknown>) => void }) | null;
+    let tries = 0;
+    const wire = setInterval(() => {
+      tries++;
+      if (el?.onDonationRequest) {
+        clearInterval(wire);
+        el.onDonationRequest(async () => {
+          const problem = checkRef.current();
+          if (problem) { setErr(problem); return false; }
+          const v = formRef.current();
+          const [first, ...rest] = v.name.trim().split(/\s+/);
+          return {
+            amount: Math.round((v.plan === "installments" ? v.amount : v.amount) * 100),
+            firstName: first,
+            lastName: rest.join(" "),
+            email: v.email.trim(),
+            anonymous: v.anonymous,
+            note: [v.dedication, v.message].filter(Boolean).join(" · ").slice(0, 400) || undefined,
+            frequency: v.plan === "monthly" ? "MONTHLY" : "ONE_TIME",
+            metadata: { campaign: v.campaign, ambassador: v.ambassador, team: v.team },
+          };
+        });
+      } else if (tries > 50) clearInterval(wire);
+    }, 200);
+    const onSuccess = async (ev: Event) => {
+      const detail = (ev as CustomEvent).detail || {};
+      setBusy(true);
+      try {
+        const r = await fetch("/api/chariot/grant", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...detail, form: formRef.current() }) });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || "We couldn't record your DAF gift.");
+        location.assign(`/thank-you?daf=1&c=${encodeURIComponent(campaign.slug)}`);
+      } catch (x) {
+        setErr((x as Error).message);
+        setBusy(false);
+      }
+    };
+    el?.addEventListener("CHARIOT_SUCCESS", onSuccess);
+    return () => { clearInterval(wire); el?.removeEventListener("CHARIOT_SUCCESS", onSuccess); };
+  }, [chariotCid, campaign.slug]);
+
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setF({ ...f, [k]: e.target.type === "checkbox" ? (e.target as HTMLInputElement).checked : e.target.value });
+
+  return (
+    <form className="panel" onSubmit={payCard} noValidate>
+      <div className="amts">
+        {campaign.presets.map((p) => (
+          <button type="button" key={p} className="opt num" aria-pressed={custom === "" && preset === p} onClick={() => { setPreset(p); setCustom(""); }}>
+            {money(p)}{CHAI[p] && <span className="meta" style={{ display: "block", fontWeight: 500 }}>{CHAI[p]}</span>}
+          </button>
+        ))}
+        <input className="in num" type="number" min="1" step="1" inputMode="decimal" placeholder="Other amount" value={custom} onChange={(e) => setCustom(e.target.value)} aria-label="Other amount" />
+      </div>
+      {campaign.match > 1 && amount > 0 && (
+        <div className="note-box num">You give <b>{money(amount)}</b>, and with the match the campaign receives <b>{money(amount * campaign.match)}</b>.</div>
+      )}
+      <div className="seg" role="group" aria-label="How often">
+        {([["once", "One-time"], ["installments", "Split monthly"], ["monthly", "Monthly ongoing"]] as const).map(([k, l]) => (
+          <button type="button" key={k} className="opt" aria-pressed={plan === k} onClick={() => setPlan(k)}>{l}</button>
+        ))}
+      </div>
+      {plan === "installments" && (
+        <label className="f">Number of months
+          <select className="in" value={months} onChange={(e) => setMonths(Number(e.target.value))}>
+            {[2, 3, 4, 6, 10, 12, 18, 24].map((n) => <option key={n} value={n}>{n}</option>)}
+          </select>
+          <span className="meta num" style={{ fontWeight: 400 }}>{money(perPayment, true)} a month for {months} months. Your full pledge of {money(amount)} counts today.</span>
+        </label>
+      )}
+      {plan === "monthly" && <p className="num">{money(amount)} every month until you cancel. Each payment counts toward the campaign.</p>}
+      {(ambassadors.length > 0 || teams.length > 0) && (
+        <label className="f">Credit this gift to
+          <select className="in" value={credit} onChange={(e) => setCredit(e.target.value)}>
+            <option value="">{campaign.name} (general)</option>
+            {ambassadors.length > 0 && <optgroup label="Ambassadors">{ambassadors.map((a) => <option key={a.slug} value={"a:" + a.slug}>{a.name}</option>)}</optgroup>}
+            {teams.length > 0 && <optgroup label="Teams">{teams.map((t) => <option key={t.slug} value={"t:" + t.slug}>{t.name}</option>)}</optgroup>}
+          </select>
+        </label>
+      )}
+      <div className="form-grid">
+        <label className="f">Full name<input className="in" value={f.name} onChange={set("name")} autoComplete="name" required /></label>
+        <label className="f">Email for your receipt<input className="in" type="email" value={f.email} onChange={set("email")} autoComplete="email" required /></label>
+        <label className="f">Phone (optional)<input className="in" type="tel" value={f.phone} onChange={set("phone")} autoComplete="tel" /></label>
+        <label className="f">Dedication (optional)<input className="in" value={f.dedication} onChange={set("dedication")} placeholder="In honor of / l'ilui nishmas…" maxLength={140} /></label>
+        <label className="f full">Message for the donor wall (optional)<input className="in" value={f.message} onChange={set("message")} maxLength={280} /></label>
+      </div>
+      <label className="chk"><input type="checkbox" checked={f.anonymous} onChange={set("anonymous")} /> Show my name as Anonymous</label>
+      <label className="chk"><input type="checkbox" checked={f.coverFee} onChange={set("coverFee")} /> <span className="num">Add {money(fee || 0, true)} so the card fee doesn&apos;t come out of my gift</span></label>
+      <div className="total num"><span>{plan === "once" ? "Total" : "Charged today"}</span><span>{money(perPayment + fee, true)}</span></div>
+      {err && <p className="error" role="alert">{err}</p>}
+      <button className="btn wide" type="submit" disabled={busy || !(amount >= 1)}>{busy ? "One moment…" : "Pay by card, Apple Pay or bank"}</button>
+      {chariotCid && (
+        <>
+          <div className="or">or give from a donor-advised fund: OJC, The Donors&apos; Fund, Matbia, Fidelity and more</div>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <chariot-connect ref={chariotRef} id="chariot" cid={chariotCid} context="popup" theme="LightModeTheme" />
+          </div>
+          {plan === "installments" && <p className="meta" style={{ textAlign: "center" }}>DAF gifts go as one grant for the full amount.</p>}
+        </>
+      )}
+    </form>
+  );
+}
