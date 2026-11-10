@@ -21,7 +21,8 @@ export async function POST(req: Request) {
   const token = process.env.CHARIOT_API_KEY;
   if (!token) return NextResponse.json({ error: "DAF giving isn't set up yet." }, { status: 503 });
   const recurring = Boolean(body?.recurringGrantIntent);
-  const res = await fetch(`https://api.givechariot.com/v1/${recurring ? "recurring_grants" : "grants"}`, {
+  const api = (process.env.CHARIOT_API_URL || "https://api.givechariot.com").replace(/\/$/, ""); // set to Chariot's sandbox address while testing
+  const res = await fetch(`${api}/v1/${recurring ? "recurring_grants" : "grants"}`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({
