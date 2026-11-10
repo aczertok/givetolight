@@ -1,6 +1,9 @@
 export const ORG_NAME = process.env.NEXT_PUBLIC_ORG_NAME || "The Lighthouse Project";
 export const ORG_EIN = process.env.NEXT_PUBLIC_ORG_EIN || "84-3301528";
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://givetolight.com").replace(/\/$/, "");
+/** "givetolight.com": the domain as visitors see it. */
+export const SITE_HOST = SITE_URL.replace(/^https?:\/\//, "");
+export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "Give to Light";
 
 export function money(n: number | string | null | undefined, cents = false): string {
   const v = Number(n || 0);

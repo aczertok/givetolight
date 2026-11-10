@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { fmtPhone, money } from "@/lib/format";
+import { fmtPhone, money, SITE_HOST } from "@/lib/format";
 import { setAmbassadorStatus } from "../actions";
 
 export default async function Ambassadors({ searchParams }: { searchParams: Promise<{ c?: string }> }) {
@@ -51,7 +51,7 @@ export default async function Ambassadors({ searchParams }: { searchParams: Prom
           );
         })}
       </tbody></table></div>
-      {!ambs?.length && <div className="donors" style={{ marginTop: 10 }}><div className="empty">No ambassadors yet. Share givetolight.com/ambassador with your volunteers, or invite past ambassadors from Outreach.</div></div>}
+      {!ambs?.length && <div className="donors" style={{ marginTop: 10 }}><div className="empty">No ambassadors yet. Share {SITE_HOST}/ambassador with your volunteers, or invite past ambassadors from Outreach.</div></div>}
     </>
   );
 }

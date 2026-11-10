@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin, allRows, type Gift, METHOD_LABEL } from "@/lib/admin";
 import { matchMath } from "@/lib/data";
-import { money, timeAgo } from "@/lib/format";
+import { money, timeAgo, SITE_HOST } from "@/lib/format";
 import { Progress } from "@/components/Bits";
 
 export default async function AdminHome() {
@@ -32,7 +32,7 @@ export default async function AdminHome() {
         g.forEach((x) => byMethod.set(x.method || "other", (byMethod.get(x.method || "other") || 0) + Number(x.amount)));
         return (
           <section key={c.id} style={{ marginBottom: 28 }}>
-            <h2 className="section-h"><Link href={`/admin/campaigns/${c.id}`}>{c.name}</Link> <span className="meta" style={{ fontFamily: "var(--body)", fontSize: 14 }}>givetolight.com/{c.slug}</span></h2>
+            <h2 className="section-h"><Link href={`/admin/campaigns/${c.id}`}>{c.name}</Link> <span className="meta" style={{ fontFamily: "var(--body)", fontSize: 14 }}>{SITE_HOST}/{c.slug}</span></h2>
             <div className="kpis num">
               <div className="kpi"><span>Raised with match</span><b>{money(mm.total)}</b><small>{c.goal ? `${Math.round((mm.total / Number(c.goal)) * 100)}% of ${money(c.goal)}` : "no goal set"}</small></div>
               <div className="kpi"><span>From donors</span><b>{money(raised)}</b><small>{g.length} gifts{g.length ? ` · avg ${money(raised / g.length)}` : ""}</small></div>

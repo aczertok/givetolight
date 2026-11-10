@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
-import { ORG_NAME, ORG_EIN, SITE_URL } from "@/lib/format";
+import { ORG_NAME, ORG_EIN, SITE_URL, SITE_NAME } from "@/lib/format";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Give to Light", template: "%s · Give to Light" },
+  title: { default: SITE_NAME, template: `%s · ${SITE_NAME}` },
   description: `Support ${ORG_NAME}: campaigns, teams and ambassadors raising money for young women in Monsey and Pomona.`,
 };
 

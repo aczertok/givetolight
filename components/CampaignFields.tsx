@@ -1,4 +1,5 @@
 import PhotoField from "@/components/PhotoField";
+import { SITE_HOST } from "@/lib/format";
 
 type C = Record<string, unknown>;
 const dt = (v: unknown) => (typeof v === "string" && v ? new Date(v).toISOString().slice(0, 16) : "");
@@ -8,7 +9,7 @@ export default function CampaignFields({ c, userId }: { c?: C; userId: string })
   return (
     <div className="form-grid">
       <label className="f">Campaign name<input className="in" name="name" required defaultValue={v("name")} placeholder="Hike for Light 2027" /></label>
-      <label className="f">Web address: givetolight.com/<input className="in" name="slug" defaultValue={v("slug")} placeholder="hike-2027" pattern="[a-z0-9][a-z0-9\-]{1,60}" title="Lowercase letters, numbers and dashes" /></label>
+      <label className="f">Web address: {SITE_HOST}/<input className="in" name="slug" defaultValue={v("slug")} placeholder="volley2027" pattern="[a-z0-9][a-z0-9\-]{1,60}" title="Lowercase letters, numbers and dashes" /></label>
       <label className="f">Type
         <select className="in" name="kind" defaultValue={String(v("kind") || "hike")}><option value="hike">Hike</option><option value="volleyball">Volleyball</option><option value="other">Other</option></select>
       </label>

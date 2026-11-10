@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase/server";
 
-// Stripe → Developers → Webhooks: send these events to https://givetolight.com/api/stripe/webhook
+// Stripe → Developers → Webhooks: send these events to https://<your domain>/api/stripe/webhook
 // checkout.session.completed, checkout.session.async_payment_succeeded,
 // checkout.session.async_payment_failed, invoice.paid, charge.refunded
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { currentUser, isAdmin } from "@/lib/supabase/server";
+import { SITE_NAME } from "@/lib/format";
 
 export default async function SiteHeader() {
   const user = await currentUser().catch(() => null);
@@ -15,7 +16,7 @@ export default async function SiteHeader() {
             <path d="M16.5 7.5l7-2.5v5zM9.5 7.5l-7-2.5v5z" fill="#d9a33f" opacity=".55" />
           </svg>
           <span>
-            Give to Light
+            {SITE_NAME}
             <small>The Lighthouse Project</small>
           </span>
         </Link>

@@ -6,7 +6,7 @@ export async function middleware(req: NextRequest) {
   let res = NextResponse.next({ request: req });
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key || process.env.DEMO_MODE === "1") return res;
+  if (!url || !key) return res;
   const sb = createServerClient(url, key, {
     cookies: {
       getAll: () => req.cookies.getAll(),
