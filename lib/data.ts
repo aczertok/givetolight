@@ -97,8 +97,12 @@ export async function listCampaigns(): Promise<(Campaign & { raised: number; tot
 export async function getCampaign(slug: string): Promise<Campaign | null> {
   if (!supabaseConfigured()) return null;
   const sb = await supabaseServer();
-  const { data } = await sb.from("campaigns_public").select("*").eq("slug", slug).maybeSingle();
-  return data ? normCampaign(data) : null;
+  const key = slug.toLowerCase();
+  const { data } = await sb.from("campaigns_public").select("*").eq("slug", key).maybeSingle();
+  if (data) return normCampaign(data);
+  // Staff can preview drafts (row-level security only returns them to admins).
+  const { data: draft } = await sb.from("campaigns").select("*").eq("slug", key).maybeSingle();
+  return draft ? normCampaign(draft) : null;
 }
 
 export async function getCampaignPage(slug: string): Promise<CampaignPage | null> {

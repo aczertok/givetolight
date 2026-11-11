@@ -9,9 +9,14 @@ const numOrNull = (fd: FormData, k: string) => {
   const v = str(fd, k, 20);
   return v === "" ? null : Number(v);
 };
+// Date/time boxes are filled in New York time; store the exact moment.
 const dateOrNull = (fd: FormData, k: string) => {
   const v = str(fd, k, 40);
-  return v ? new Date(v).toISOString() : null;
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v)) return null;
+  const asUtc = new Date(v.slice(0, 16) + ":00Z");
+  const ny = new Date(asUtc.toLocaleString("en-US", { timeZone: "America/New_York" }));
+  const utc = new Date(asUtc.toLocaleString("en-US", { timeZone: "UTC" }));
+  return new Date(asUtc.getTime() + (utc.getTime() - ny.getTime())).toISOString();
 };
 
 function campaignFields(fd: FormData) {
@@ -68,9 +73,15 @@ export async function addTeam(fd: FormData) {
   const campaign_id = str(fd, "campaign_id", 60);
   const name = str(fd, "name", 80);
   if (name) {
-    await sb.from("teams").insert({ campaign_id, name, slug: slugify(name), goal: numOrNull(fd, "goal"), blurb: str(fd, "blurb", 300) || null });
+    const { data: existing } = await sb.from("teams").select("slug").eq("campaign_id", campaign_id);
+    const used = new Set((existing || []).map((t) => t.slug));
+    const base = slugify(name).length >= 2 ? slugify(name) : `team-${slugify(name) || "1"}`;
+    let slug = base;
+    for (let i = 2; used.has(slug); i++) slug = `${base}-${i}`;
+    await sb.from("teams").insert({ campaign_id, name, slug, goal: numOrNull(fd, "goal"), blurb: str(fd, "blurb", 300) || null });
   }
-  revalidatePath(`/admin/campaigns/${campaign_id}`);
+  revalidatePath("/", "layout");
+  redirect(`/admin/campaigns/${campaign_id}?tab=teams`);
 }
 
 export async function updateTeam(fd: FormData) {
@@ -79,7 +90,8 @@ export async function updateTeam(fd: FormData) {
   const campaign_id = str(fd, "campaign_id", 60);
   if (fd.get("delete") === "1") await sb.from("teams").delete().eq("id", id);
   else await sb.from("teams").update({ name: str(fd, "name", 80), goal: numOrNull(fd, "goal"), blurb: str(fd, "blurb", 300) || null, photo_url: str(fd, "photo_url", 500) || null }).eq("id", id);
-  revalidatePath(`/admin/campaigns/${campaign_id}`);
+  revalidatePath("/", "layout");
+  redirect(`/admin/campaigns/${campaign_id}?tab=teams`);
 }
 
 export async function setAmbassadorStatus(fd: FormData) {
@@ -113,6 +125,8 @@ export async function adminAddAmbassador(fd: FormData) {
     status: "live",
   });
   revalidatePath("/admin/ambassadors");
+  revalidatePath("/", "layout");
+  redirect(`/admin/campaigns/${campaign_id}?tab=ambassadors`);
 }
 
 export async function addOfflineGift(fd: FormData) {
@@ -220,4 +234,13 @@ export async function importGifts(campaignId: string, rows: ImportRow[], replace
   }
   revalidatePath("/admin", "layout");
   return { ok: true, count: clean.length };
+}
+
+export async function setCampaignStatus(fd: FormData) {
+  const { sb } = await requireAdmin();
+  const id = str(fd, "id", 60);
+  const status = str(fd, "status", 10);
+  if (["draft", "live", "ended"].includes(status)) await sb.from("campaigns").update({ status }).eq("id", id);
+  revalidatePath("/", "layout");
+  redirect(`/admin/campaigns/${id}?saved=1`);
 }

@@ -9,7 +9,7 @@ export async function requireAdmin() {
   return { user, sb: await supabaseServer() };
 }
 
-export const RESERVED = new Set(["admin", "ambassador", "login", "auth", "api", "thank-you", "privacy", "terms", "about"]);
+export const RESERVED = new Set(["admin", "ambassador", "login", "auth", "api", "thank-you", "privacy", "terms", "about", "account", "join", "donate", "team"]);
 
 export type Gift = {
   id: string;

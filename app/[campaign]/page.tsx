@@ -22,8 +22,10 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
   if (!page) notFound();
   const { campaign: c, total, donorCount } = page;
   const live = c.status === "live";
+  const draft = c.status === "draft";
   return (
     <>
+      {draft && <div className="draft-bar"><div className="wrap">Draft preview: only staff can see this page. Visitors see it once you set the campaign to <b>Live</b>. <Link href={`/admin/campaigns/${c.id}`}>Open in admin →</Link></div></div>}
       <section className="hero">
         <div className="wrap">
           <div>
@@ -43,7 +45,8 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
               <div><b>{donorCount}</b><span>donors</span></div>
               <div><b>{page.ambassadors.length}</b><span>ambassadors</span></div>
             </div>
-            {live ? <Link className="btn wide" href={`/${c.slug}/donate`}>Donate now</Link> : <div className="note-box" style={{ textAlign: "center" }}>This campaign has ended. Thank you to everyone who gave.</div>}
+            {live ? <Link className="btn wide" href={`/${c.slug}/donate`}>Donate now</Link> : draft ? <div className="note-box" style={{ textAlign: "center" }}>The Donate button appears here when the campaign is Live.</div> : <div className="note-box" style={{ textAlign: "center" }}>This campaign has ended. Thank you to everyone who gave.</div>}
+            {(live || draft) && <Link className="btn ghost wide" href={`/${c.slug}/join`}>Become an ambassador</Link>}
             {live && <Countdown endsAt={c.ends_at} />}
           </aside>
         </div>

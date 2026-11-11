@@ -323,3 +323,15 @@ body:has(.adm) .site-header, body:has(.adm) .site-footer { display: none; }
 .cf-sec { min-width: 0; }
 @media (max-width: 900px) { .adm { grid-template-columns: minmax(0, 1fr); } .adm-body { overflow-x: hidden; } }
 @media (max-width: 640px) { .cf .form-grid { grid-template-columns: minmax(0, 1fr); } .cf-sec { padding: 14px; } .slug-host { font-size: 13px; padding-left: 10px; } }
+.as-form { max-width: 680px; }
+.as-camp { margin: 0; color: var(--ink) !important; font-size: 15px !important; }
+.as-team { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 10px; margin: 0; }
+.as-team legend { font-weight: 600; font-size: 14px; padding: 0 6px; }
+.as-hero { background: var(--navy); color: var(--band); border-radius: 14px; padding: 24px; margin-bottom: 18px; display: grid; gap: 8px; }
+.as-hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(28px, 4vw, 40px); margin: 0; }
+.as-hero ul { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+.draft-bar { background: var(--gold); color: #1d1606; font-size: 14px; padding: 9px 0; }
+.draft-bar a { color: inherit; font-weight: 700; }
+.team-row { display: grid; grid-template-columns: 1.3fr .6fr 2fr 70px auto; gap: 8px; padding: 8px 12px; align-items: center; }
+@media (max-width: 760px) { .team-row { grid-template-columns: 1fr 1fr; } }
+a.cc-tab { text-decoration: none; }

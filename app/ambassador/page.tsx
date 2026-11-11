@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { currentUser, supabaseServer } from "@/lib/supabase/server";
+import { currentUser, supabaseServer, supabaseAdmin, supabaseConfigured } from "@/lib/supabase/server";
+import AmbassadorSignup from "@/components/AmbassadorSignup";
 import { listCampaigns, matchMath } from "@/lib/data";
 import { money, SITE_URL, timeAgo } from "@/lib/format";
 import { Progress } from "@/components/Bits";
@@ -17,16 +18,20 @@ export default async function AmbassadorHome({ searchParams }: { searchParams: P
   const user = await currentUser();
   const campaigns = await listCampaigns().catch(() => []);
   const live = campaigns.filter((c) => c.status === "live");
+  const staff = user && supabaseConfigured() ? (await (await supabaseServer()).rpc("is_admin")).data === true : false;
+  const drafts = staff ? ((await supabaseAdmin().from("campaigns").select("id, slug, name, status").eq("status", "draft")).data || []) : [];
+  const open = [...live.map((c) => ({ id: c.id, slug: c.slug, name: c.name, status: c.status })), ...drafts];
+  const { data: openTeams } = open.length && supabaseConfigured() ? await supabaseAdmin().from("teams").select("campaign_id, slug, name").in("campaign_id", open.map((c) => c.id)).order("name") : { data: [] };
 
   if (!user) {
     return (
       <main className="page wrap" style={{ maxWidth: 720 }}>
-        <h1 className="section-h">Become an ambassador</h1>
-        <div className="panel">
-          <p style={{ color: "var(--ink)", fontSize: 16 }}>Ambassadors get their own page with a goal, a progress bar and a link to share with family and friends. Every gift to your page counts toward the campaign{live.some((c) => c.match_multiplier > 1) ? " and is matched" : ""}.</p>
-          <p>Log in with your email to create your page, or to see the page you already have.</p>
-          <Link className="btn" href={`/login?next=${encodeURIComponent("/ambassador" + (sp.join ? `?join=${sp.join}` : ""))}`} style={{ justifySelf: "start" }}>Log in or sign up</Link>
+        <div className="as-hero">
+          <h1>Become an ambassador</h1>
+          <p style={{ margin: 0 }}>Get your own fundraising page for The Lighthouse Project, with your photo, a goal, a progress bar and a link to share with family and friends.{live.some((c) => c.match_multiplier > 1) ? " Every gift to your page is matched." : ""}</p>
+          <ul><li>Takes one minute</li><li>Join a team or start your own</li><li>See every gift that comes in through you</li></ul>
         </div>
+        <AmbassadorSignup campaigns={open} teams={openTeams || []} initial={sp.join} loggedIn={false} />
       </main>
     );
   }
@@ -40,6 +45,7 @@ export default async function AmbassadorHome({ searchParams }: { searchParams: P
     : { data: [] as never[] };
   const campaignById = new Map(campaigns.map((c) => [c.id, c]));
   const joinable = live.filter((c) => !mine.some((m) => m.campaign_id === c.id));
+  const openJoin = open.filter((c) => !mine.some((m) => m.campaign_id === c.id));
   const joinSlug = sp.join && joinable.some((c) => c.slug === sp.join) ? sp.join : joinable[0]?.slug;
   const { data: teams } = joinable.length ? await sb.from("teams_public").select("campaign_id, slug, name").in("campaign_id", joinable.map((c) => c.id)) : { data: [] };
 
@@ -101,30 +107,8 @@ export default async function AmbassadorHome({ searchParams }: { searchParams: P
         );
       })}
 
-      {joinable.length > 0 && (
-        <form className="panel" action={joinCampaign} style={{ maxWidth: 640, marginTop: mine.length ? 20 : 0 }}>
-          <h2>{mine.length ? "Join another campaign" : "Create your ambassador page"}</h2>
-          <label className="f">Campaign
-            <select className="in" name="campaign" defaultValue={joinSlug}>{joinable.map((c) => <option key={c.id} value={c.slug}>{c.name}</option>)}</select>
-          </label>
-          {(teams || []).length > 0 && (
-            <label className="f">Team (optional)
-              <select className="in" name="team" defaultValue="">
-                <option value="">No team</option>
-                {(teams || []).map((t) => <option key={t.campaign_id + t.slug} value={t.slug}>{t.name} · {campaignById.get(t.campaign_id)?.name}</option>)}
-              </select>
-            </label>
-          )}
-          <label className="f">Name donors will see<input className="in" name="name" required maxLength={80} placeholder="e.g. Rivka S. or The Cohen Family" /></label>
-          <div className="form-grid">
-            <label className="f">Personal goal ($)<input className="in num" name="goal" type="number" min="0" step="1" placeholder="1800" /></label>
-            <label className="f">Phone (private)<input className="in" name="phone" type="tel" /></label>
-          </div>
-          <label className="f">Why I&apos;m raising (optional)<textarea className="in" name="story" rows={3} maxLength={1200} /></label>
-          <button className="btn" style={{ justifySelf: "start" }}>Create my page</button>
-        </form>
-      )}
-      {!mine.length && !joinable.length && <div className="donors"><div className="empty">No campaign is open for ambassadors right now.</div></div>}
+      {openJoin.length > 0 && <div style={{ marginTop: mine.length ? 20 : 0 }}><AmbassadorSignup campaigns={openJoin} teams={openTeams || []} initial={sp.join} loggedIn email={user.email || ""} /></div>}
+      {!mine.length && !openJoin.length && <div className="donors"><div className="empty">No campaign is open for ambassadors right now.</div></div>}
     </main>
   );
 }

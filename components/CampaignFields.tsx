@@ -3,7 +3,7 @@ import { SITE_HOST } from "@/lib/format";
 import NameSlug from "@/components/NameSlug";
 
 type C = Record<string, unknown>;
-const dt = (v: unknown) => (typeof v === "string" && v ? new Date(v).toISOString().slice(0, 16) : "");
+const dt = (v: unknown) => (typeof v === "string" && v ? new Date(v).toLocaleString("sv-SE", { timeZone: "America/New_York" }).replace(" ", "T").slice(0, 16) : "");
 
 export default function CampaignFields({ c, userId, taken = [] }: { c?: C; userId: string; taken?: string[] }) {
   const v = (k: string) => (c?.[k] ?? "") as string | number;
@@ -27,7 +27,7 @@ export default function CampaignFields({ c, userId, taken = [] }: { c?: C; userI
       </div></section>
 
       <section className="cf-sec"><h3><span>3</span>Dates and status</h3><div className="form-grid">
-        <label className="f">Starts<input className="in" name="starts_at" type="datetime-local" defaultValue={dt(c?.starts_at)} /></label>
+        <label className="f">Starts (New York time)<input className="in" name="starts_at" type="datetime-local" defaultValue={dt(c?.starts_at)} /></label>
         <label className="f">Ends (shows a countdown)<input className="in" name="ends_at" type="datetime-local" defaultValue={dt(c?.ends_at)} /></label>
         <label className="f full">Status
           <select className="in" name="status" defaultValue={String(v("status") || "draft")}>
