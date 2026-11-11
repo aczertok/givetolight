@@ -14,6 +14,7 @@ export default async function EditCampaign({ params, searchParams }: { params: P
   const { data: c } = await sb.from("campaigns").select("*").eq("id", id).maybeSingle();
   if (!c) notFound();
   const { data: teams } = await sb.from("teams").select("*").eq("campaign_id", id).order("name");
+  const { data: slugs } = await sb.from("campaigns").select("slug");
   const { data: ambs } = await sb.from("ambassadors").select("id, name, slug, status, team_id").eq("campaign_id", id).order("name");
   return (
     <>
@@ -29,10 +30,10 @@ export default async function EditCampaign({ params, searchParams }: { params: P
       {sp.created && <p className="note-box">Campaign created as {c.status}. Set it to Live when you&apos;re ready for donations.</p>}
       {sp.saved && <p className="note-box">Saved.</p>}
       {sp.error && <p className="error">{ERR[sp.error] || ERR.save}</p>}
-      <form className="panel" action={updateCampaign}>
+      <form action={updateCampaign}>
         <input type="hidden" name="id" value={c.id} />
-        <CampaignFields c={c} userId={user.id} />
-        <button className="btn" style={{ justifySelf: "start" }}>Save campaign</button>
+        <CampaignFields c={c} userId={user.id} taken={(slugs || []).map((x) => x.slug)} />
+        <div className="cf-save"><button className="btn">Save campaign</button></div>
       </form>
 
       <h2 className="section-h">Teams</h2>
