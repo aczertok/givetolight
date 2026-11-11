@@ -9,12 +9,7 @@ export default async function SiteHeader() {
     <header className="site-header">
       <div className="wrap">
         <Link href="/" className="brand">
-          <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true">
-            <path d="M10 24h6l-1.2-14h-3.6z" fill="#f3efe3" />
-            <rect x="10.4" y="6" width="5.2" height="4" rx="1" fill="#d9a33f" />
-            <path d="M13 3l3 3h-6z" fill="#f3efe3" />
-            <path d="M16.5 7.5l7-2.5v5zM9.5 7.5l-7-2.5v5z" fill="#d9a33f" opacity=".55" />
-          </svg>
+          <span className="lh-brand-mark"><img src="/lighthouse-mark.svg" alt="The Monsey Lighthouse" width="43" height="43" /></span>
           <span>
             {SITE_NAME}
             <small>The Lighthouse Project</small>
