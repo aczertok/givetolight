@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     const s = event.data.object as Stripe.Checkout.Session;
     const m = s.metadata || {};
     if (!m.campaign_id) return NextResponse.json({ ok: true });
+    await db.from("checkout_starts").update({ completed: true }).eq("session_id", s.id);
     const paid = s.payment_status === "paid" || s.payment_status === "no_payment_required";
     const plan = m.plan || null;
     // Installments count the full pledge now; monthly counts each payment as it arrives.

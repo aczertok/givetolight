@@ -20,6 +20,7 @@ export default async function EditCampaign({ params, searchParams }: { params: P
       <div className="toolbar">
         <h1 className="section-h" style={{ margin: 0 }}>{c.name}</h1>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <Link className="btn" href={`/admin/campaigns/${c.id}/dashboard`}>Dashboard</Link>
           <Link className="btn ghost" href={`/admin/donations?c=${c.id}`}>Donations</Link>
           <Link className="btn ghost" href={`/admin/ambassadors?c=${c.id}`}>Ambassadors ({ambs?.length || 0})</Link>
           {c.status !== "draft" && <Link className="btn ghost" href={`/${c.slug}`}>View page</Link>}

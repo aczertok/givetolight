@@ -4,6 +4,7 @@ import { stripe, coverFee } from "@/lib/stripe";
 import { validateDonate } from "@/lib/donate";
 import { resolveTarget } from "@/lib/resolve";
 import { SITE_URL, ORG_NAME } from "@/lib/format";
+import { supabaseAdmin } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
   const parsed = validateDonate(await req.json().catch(() => null));
@@ -58,6 +59,11 @@ export async function POST(req: Request) {
       success_url: `${SITE_URL}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: back,
     });
+    // Remember the attempt so staff can follow up if it's never finished.
+    await supabaseAdmin().from("checkout_starts").insert({
+      session_id: session.id, campaign_id: target.campaign.id, ambassador_id: target.ambassador?.id || null, team_id: target.teamId || null,
+      donor_name: v.name, donor_email: v.email.toLowerCase(), donor_phone: v.phone || null, amount: v.amount, plan: meta.plan || null, method: body2.method || "card",
+    }).then(({ error }) => { if (error) console.error("checkout_starts", error); });
     return NextResponse.json({ url: session.url });
   } catch (e) {
     console.error("checkout", e);
