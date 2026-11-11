@@ -30,7 +30,7 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
   const [plan, setPlan] = useState<"once" | "monthly" | "installments">(initialPlan);
   const [months, setMonths] = useState(12);
   const [credit, setCredit] = useState(initialAmbassador ? "a:" + initialAmbassador : initialTeam ? "t:" + initialTeam : "");
-  const [f, setF] = useState({ name: "", email: "", phone: "", dedication: "", message: "", anonymous: false, coverFee: true });
+  const [f, setF] = useState({ name: "", email: "", phone: "", dedication: "", message: "", anonymous: false, coverFee: false });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const chariotRef = useRef<HTMLElement | null>(null);
@@ -139,6 +139,7 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
 
   return (
     <form className="panel" onSubmit={(e) => { e.preventDefault(); pay("card"); }} noValidate>
+      <div className="gl-checkout-heading">Your donation <span>Choose how much to give</span></div>
       <div className="amts">
         {campaign.presets.map((p) => (
           <button type="button" key={p} className="opt num" aria-pressed={custom === "" && preset === p} onClick={() => { setPreset(p); setCustom(""); }}>
@@ -173,15 +174,21 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
           </select>
         </label>
       )}
+      <div className="gl-checkout-heading">Your details <span>Just two essentials to get started</span></div>
       <div className="form-grid">
         <label className="f">Full name<input className="in" value={f.name} onChange={set("name")} autoComplete="name" required /></label>
         <label className="f">Email for your receipt<input className="in" type="email" value={f.email} onChange={set("email")} autoComplete="email" required /></label>
-        <label className="f">Phone (optional)<input className="in" type="tel" value={f.phone} onChange={set("phone")} autoComplete="tel" /></label>
-        <label className="f">Dedication (optional)<input className="in" value={f.dedication} onChange={set("dedication")} placeholder="In honor of / l'ilui nishmas…" maxLength={140} /></label>
-        <label className="f full">Message for the donor wall (optional)<input className="in" value={f.message} onChange={set("message")} maxLength={280} /></label>
       </div>
-      <label className="chk"><input type="checkbox" checked={f.anonymous} onChange={set("anonymous")} /> Show my name as Anonymous</label>
-      <label className="chk"><input type="checkbox" checked={f.coverFee} onChange={set("coverFee")} /> <span className="num">Add {money(fee || 0, true)} so the card fee doesn&apos;t come out of my gift</span></label>
+      <details className="gl-checkout-optional">
+        <summary>More options: dedication, phone &amp; donor privacy</summary>
+        <div className="gl-checkout-extra-fields">
+          <label className="f">Phone (optional)<input className="in" type="tel" value={f.phone} onChange={set("phone")} autoComplete="tel" /></label>
+          <label className="f">Dedication (optional)<input className="in" value={f.dedication} onChange={set("dedication")} placeholder="In honor of / l'ilui nishmas…" maxLength={140} /></label>
+          <label className="f">Message for the donor wall (optional)<input className="in" value={f.message} onChange={set("message")} maxLength={280} /></label>
+          <label className="chk"><input type="checkbox" checked={f.anonymous} onChange={set("anonymous")} /> Show my name as Anonymous</label>
+        </div>
+      </details>
+      <label className="chk gl-fee-option"><input type="checkbox" checked={f.coverFee} onChange={set("coverFee")} /> <span className="num">Add {money(fee || 0, true)} to help cover processing fees (optional)</span></label>
       <div className="total num"><span>{plan === "once" ? "Total" : "Charged today"}</span><span>{money(perPayment + fee, true)}</span></div>
       {err && <p className="error" role="alert">{err}</p>}
       <div className="pay-label">Choose how to pay</div>
