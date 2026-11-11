@@ -37,7 +37,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
       <section className="gl-campaign-first">
         <div className="wrap">
           <div className="gl-campaign-overline">
-            <span className="gl-campaign-live-dot" /> {live ? "CAMPAIGN LIVE" : "CAMPAIGN ENDED"}
+            <span className="gl-campaign-live-dot" /> {live ? "CAMPAIGN LIVE" : draft ? "DRAFT PREVIEW" : "CAMPAIGN ENDED"}
             <span className="gl-campaign-slug">{c.slug}</span>
           </div>
           <div className="gl-campaign-two-column">
@@ -60,7 +60,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
                 <div><strong>{page.teams.length}</strong><span>Teams</span></div>
               </div>
               {live && <Countdown endsAt={c.ends_at} />}
-              {!live && <div className="gl-campaign-ended">This campaign has ended. Thank you for your support.</div>}
+              {!live && !draft && <div className="gl-campaign-ended">This campaign has ended. Thank you for your support.</div>}
               {(live || draft) && <div className="gl-campaign-join-action"><Link href={`/${c.slug}/join`}>Become an ambassador <span aria-hidden="true">↗</span></Link></div>}
               <div className="gl-campaign-inline-actions">
                 <a href="#community">Explore teams &amp; ambassadors ↓</a>
