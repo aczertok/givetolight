@@ -170,6 +170,8 @@ export default function CampaignDashboard({ campaign: c, prev, gifts, prevGifts,
         </div>
       </div>
 
+      <DonationAnalytics gifts={ok} ambassadorsCount={ambassadors.filter((a) => a.status === "live").length} teamsCount={teams.length} />
+
       <div className="an-grid" style={{ marginTop: 16 }}>
         <section className="panel">
           <h2>Pace{prev ? ` vs. ${prev.name}` : ""}</h2>
@@ -340,5 +342,58 @@ function Pace({ now, prev }: { now: number[]; prev: number[] }) {
       {hx != null && <div className="an-tip an-tip-pace num"><b>Day {hx}</b><div><span className="an-dot" style={{ background: "var(--berry)" }} />This campaign: {hx < now.length ? fmt(at(now, hx)) : "—"}</div>{prev.length > 0 && <div><span className="an-dot" style={{ background: "var(--muted)" }} />Last time: {fmt(at(prev, hx))}</div>}</div>}
       <div className="an-legend"><span><span className="an-dot" style={{ background: "var(--berry)" }} />This campaign</span>{prev.length > 0 && <span><span className="an-dot" style={{ background: "var(--muted)" }} />Last time</span>}</div>
     </div>
+  );
+}
+
+const OFFLINE = new Set(["check", "cash", "zelle", "wire", "other"]);
+const TIERS: [string, number, number][] = [["$1–35", 0, 36], ["$36–99", 36, 100], ["$100–179", 100, 180], ["$180–359", 180, 360], ["$360–999", 360, 1000], ["$1k–4,999", 1000, 5000], ["$5k+", 5000, Infinity]];
+function DonationAnalytics({ gifts, ambassadorsCount, teamsCount }: { gifts: DGift[]; ambassadorsCount: number; teamsCount: number }) {
+  const [page, setPage] = useState<"main" | "amb">("main");
+  const sum = (a: DGift[]) => a.reduce((s, g) => s + g[5], 0);
+  const single = gifts.filter((g) => !g[11]), monthly = gifts.filter((g) => g[11] === "monthly"), inst = gifts.filter((g) => g[11].startsWith("installments"));
+  const offline = gifts.filter((g) => OFFLINE.has(g[6])), online = gifts.filter((g) => !OFFLINE.has(g[6]));
+  const main = gifts.filter((g) => !g[7] && !g[9]), viaAmb = gifts.filter((g) => g[7] || g[9]);
+  const pick = page === "main" ? main : viaAmb;
+  const amts = pick.map((g) => g[5]);
+  const tiers = TIERS.map(([l, lo, hi]) => ({ l, n: gifts.filter((g) => g[5] >= lo && g[5] < hi).length }));
+  const maxT = Math.max(1, ...tiers.map((t) => t.n));
+  const card = (title: string, cls: string, a: DGift[]) => (
+    <div className={`cd-type ${cls}`}><h3>{title}</h3><div className="num"><b>{fmt(sum(a))}</b><small>Amount</small></div><div className="num"><b>{num(a.length)}</b><small>Count</small></div><div className="num"><b>{fmt(a.length ? sum(a) / a.length : 0)}</b><small>Average</small></div></div>
+  );
+  return (
+    <>
+      <h2 className="section-h">Donation analytics</h2>
+      <div className="cd-types">
+        {card("Single donations", "t1", single)}
+        {card("Recurring donations", "t2", monthly)}
+        {card("Installment donations", "t3", inst)}
+      </div>
+      <div className="an-grid" style={{ marginTop: 16 }}>
+        <section className="panel">
+          <h2>Online vs. offline</h2>
+          <div className="cd-split num">
+            <div><span className="meta">Online</span><b>{fmt(sum(online))}</b><small>{num(online.length)} gifts</small></div>
+            <div><span className="meta">Offline</span><b>{fmt(sum(offline))}</b><small>{num(offline.length)} checks, cash, etc.</small></div>
+          </div>
+          <div className="cd-stack" aria-hidden="true"><i style={{ width: pct(sum(online) / (sum(gifts) || 1)) }} /></div>
+          <div className="cd-counts num"><span><b>{num(gifts.length)}</b> donations</span><span><b>{num(ambassadorsCount)}</b> ambassadors</span><span><b>{num(teamsCount)}</b> teams</span></div>
+        </section>
+        <section className="panel">
+          <div className="toolbar" style={{ margin: 0 }}><h2>Donation information</h2>
+            <select className="in" value={page} onChange={(e) => setPage(e.target.value as "main" | "amb")} style={{ padding: "6px 10px" }} aria-label="Page"><option value="main">Main page</option><option value="amb">Ambassador &amp; team pages</option></select>
+          </div>
+          <div className="cd-info num">
+            <div><b>{fmt(sum(pick))}</b><small>Amount raised</small></div><div><b>{num(pick.length)}</b><small>Donations</small></div>
+            <div><b>{fmt(amts.length ? Math.min(...amts) : 0)}</b><small>Lowest</small></div><div><b>{fmt(amts.length ? sum(pick) / amts.length : 0)}</b><small>Average</small></div><div><b>{fmt(amts.length ? Math.max(...amts) : 0)}</b><small>Highest</small></div>
+          </div>
+        </section>
+        <section className="panel" style={{ gridColumn: "1 / -1" }}>
+          <h2>Donation distribution</h2><p>Number of donations per gift size.</p>
+          <div className="an-hist" style={{ gridTemplateColumns: `repeat(${tiers.length}, 1fr)` }}>
+            {tiers.map((t) => <div key={t.l} className="an-hcol" title={`${t.l}: ${t.n} donations`}><div className="an-hval num">{num(t.n)}</div><div className="an-hbar" style={{ height: `${(t.n / maxT) * 100}%` }} /><div className="an-hlab">{t.l}</div></div>)}
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
