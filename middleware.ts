@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // Keeps the sign-in session fresh. Only runs where a session matters.
-const SESSION_PATHS = /^\/(ambassador|admin|login|auth|account)(\/|$)|^\/$/;
+const SESSION_PATHS = /^\/(ambassador|admin|login|auth|account|go)(\/|$)|^\/$/;
 
 export async function middleware(req: NextRequest) {
   // Web addresses work in any capitals: /TEST2027 → /test2027

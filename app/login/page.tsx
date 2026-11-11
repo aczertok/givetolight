@@ -4,7 +4,7 @@ export const metadata = { title: "Log in" };
 
 export default async function Login({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   const sp = await searchParams;
-  const next = sp.next && sp.next.startsWith("/") && !sp.next.startsWith("//") ? sp.next : "/ambassador";
+  const next = sp.next && sp.next.startsWith("/") && !sp.next.startsWith("//") ? sp.next : "/go";
   return (
     <main className="page wrap" style={{ maxWidth: 480 }}>
       <h1 className="section-h">Log in</h1>

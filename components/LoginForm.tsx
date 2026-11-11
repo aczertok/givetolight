@@ -43,7 +43,7 @@ export default function LoginForm({ next }: { next: string }) {
           setErr("There's already an account with this email. Log in instead, or use “Forgot password”.");
         } else setSent(`We sent a confirmation link to ${em}. Click it to finish creating your account.`);
       } else if (mode === "forgot") {
-        const { error } = await linkClient().auth.resetPasswordForEmail(em, { redirectTo: finish(`/account?reset=1&next=${encodeURIComponent(next)}`) });
+        const { error } = await linkClient().auth.resetPasswordForEmail(em, { redirectTo: finish(`/account?reset=1`) });
         if (error) { setErr(error.message); return; }
         setSent(`If ${em} has an account, we sent a link to set a new password.`);
       } else {
