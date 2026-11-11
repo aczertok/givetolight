@@ -13,13 +13,13 @@ export default function LoginForm({ next }: { next: string }) {
     setState("sending");
     const { error } = await supabaseBrowser().auth.signInWithOtp({
       email: email.trim().toLowerCase(),
-      options: { emailRedirectTo: `${location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+      options: { emailRedirectTo: `${location.origin}/auth/confirm?next=${encodeURIComponent(next)}` },
     });
     if (error) { setErr(error.message); setState("idle"); return; }
     setState("sent");
   }
   if (state === "sent") {
-    return <div className="panel"><h2>Check your email</h2><p>We sent a sign-in link to <b>{email}</b>. Open it on this device to log in.</p></div>;
+    return <div className="panel"><h2>Check your email</h2><p>We sent a sign-in link to <b>{email}</b>. Click the link in it to log in (it works on any phone or computer). It can take a minute; check Spam too.</p></div>;
   }
   return (
     <form className="panel" onSubmit={submit}>
