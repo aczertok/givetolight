@@ -9,6 +9,8 @@ type Props = {
   initialAmbassador: string;
   initialTeam: string;
   chariotCid: string;
+  initialAmount?: number;
+  initialPlan?: "once" | "monthly";
 };
 
 declare global {
@@ -22,10 +24,10 @@ declare global {
 
 const CHAI: Record<number, string> = { 36: "2× chai", 180: "10× chai", 360: "20× chai", 1800: "100× chai" };
 
-export default function DonateForm({ campaign, ambassadors, teams, initialAmbassador, initialTeam, chariotCid }: Props) {
-  const [preset, setPreset] = useState<number | null>(campaign.presets[1] ?? campaign.presets[0] ?? 180);
+export default function DonateForm({ campaign, ambassadors, teams, initialAmbassador, initialTeam, chariotCid, initialAmount, initialPlan = "once" }: Props) {
+  const [preset, setPreset] = useState<number | null>(initialAmount ?? campaign.presets[1] ?? campaign.presets[0] ?? 180);
   const [custom, setCustom] = useState("");
-  const [plan, setPlan] = useState<"once" | "monthly" | "installments">("once");
+  const [plan, setPlan] = useState<"once" | "monthly" | "installments">(initialPlan);
   const [months, setMonths] = useState(12);
   const [credit, setCredit] = useState(initialAmbassador ? "a:" + initialAmbassador : initialTeam ? "t:" + initialTeam : "");
   const [f, setF] = useState({ name: "", email: "", phone: "", dedication: "", message: "", anonymous: false, coverFee: true });
