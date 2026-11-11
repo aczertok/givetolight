@@ -24,7 +24,7 @@ export default async function SiteHeader() {
           <Link href="/">Campaigns</Link>
           <Link href="/ambassador">{user ? "My ambassador page" : "Become an ambassador"}</Link>
           {admin && <Link href="/admin">Admin</Link>}
-          {!user && <Link href="/login">Log in</Link>}
+          {user ? <Link href="/account">My account</Link> : <Link href="/login">Log in</Link>}
         </nav>
       </div>
     </header>

@@ -8,8 +8,8 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
   return (
     <main className="page wrap" style={{ maxWidth: 480 }}>
       <h1 className="section-h">Log in</h1>
-      <p className="meta" style={{ marginBottom: 16 }}>Ambassadors and staff log in with their email. We&apos;ll send you a link; there&apos;s no password to remember.</p>
-      {sp.error && <p className="error">That sign-in link didn&apos;t work or has expired. Request a new one below.</p>}
+      <p className="meta" style={{ marginBottom: 16 }}>For ambassadors and staff.</p>
+      {sp.error && <p className="error">That link didn&apos;t work or has expired. Log in below or request a new one.</p>}
       <LoginForm next={next} />
     </main>
   );

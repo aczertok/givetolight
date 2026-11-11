@@ -250,3 +250,6 @@ tr:last-child td { border-bottom: 0; }
 .cd-counts { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
 .cd-counts b { color: var(--ink); font-size: 16px; }
 .cd-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; }
+.lf-link { background: none; border: 0; padding: 0; color: var(--berry); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.lf-alt { display: grid; gap: 8px; justify-items: start; padding-top: 4px; border-top: 1px solid var(--line); margin-top: 4px; }
+.lf-show { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: var(--sunk); border: 0; border-radius: 6px; padding: 5px 9px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: pointer; }
