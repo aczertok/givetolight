@@ -5,6 +5,7 @@ import { getCampaignPage } from "@/lib/data";
 import { money, paragraphs, SITE_URL } from "@/lib/format";
 import { Progress } from "@/components/Bits";
 import CampaignTabs from "@/components/CampaignTabs";
+import CampaignQuickDonate from "@/components/CampaignQuickDonate";
 import Countdown from "@/components/Countdown";
 import ShareBox from "@/components/ShareBox";
 
@@ -23,43 +24,76 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
   const { campaign: c, total, donorCount } = page;
   const live = c.status === "live";
   const draft = c.status === "draft";
+  const percentage = c.goal && c.goal > 0 ? Math.round((total / c.goal) * 100) : null;
+  const matchingAvailable = c.match_multiplier > 1 && (c.match_cap == null || page.matched < c.match_cap);
+
   return (
-    <>
+    <div className="gl-campaign-v2">
       {draft && <div className="draft-bar"><div className="wrap">Draft preview: only staff can see this page. Visitors see it once you set the campaign to <b>Live</b>. <Link href={`/admin/campaigns/${c.id}`}>Open in admin →</Link></div></div>}
-      <section className="hero">
+      {live && matchingAvailable && (
+        <div className="gl-campaign-match-ribbon">
+          <span aria-hidden="true">✦</span> {`Matching available: eligible gifts may be matched up to ${c.match_multiplier}× while funds last`}
+        </div>
+      )}
+      <section className="gl-campaign-first">
         <div className="wrap">
-          <div>
-            {c.cover_url && <img className="cover" src={c.cover_url} alt="" />}
-            <h1>{c.name}</h1>
-            {c.tagline && <p className="lede">{c.tagline}</p>}
-            {c.match_multiplier > 1 && <span className="match-tag">×{c.match_multiplier} · {c.match_note || "Every gift is matched"}</span>}
+          <div className="gl-campaign-overline">
+            <span className="gl-campaign-live-dot" /> {live ? "CAMPAIGN LIVE" : draft ? "DRAFT PREVIEW" : "CAMPAIGN ENDED"}
+            <span className="gl-campaign-slug">{c.slug}</span>
           </div>
-          <aside className="tally">
-            <div>
-              <div className="raised num">{money(total)}</div>
-              <div className="of num">{c.goal ? `raised of ${money(c.goal)} goal` : "raised"}</div>
+          <div className="gl-campaign-two-column">
+            <div className="gl-campaign-intro">
+              <p className="gl-campaign-category">GIVE TO LIGHT / {c.name.toUpperCase()}</p>
+              <h1>{c.name}</h1>
+              {c.tagline && <p className="gl-campaign-subtitle">{c.tagline}</p>}
+              <div className="gl-campaign-raised-block">
+                <div className="gl-campaign-raised-number num">{money(total)}</div>
+                <div className="gl-campaign-raised-description">{c.goal ? `raised of ${money(c.goal)} goal` : "raised so far"}</div>
+                <Progress value={total} goal={c.goal} />
+                {percentage !== null && (
+                  <div className="gl-campaign-progress-foot"><span>{percentage}% of goal</span><span>{total < c.goal! ? `${money(c.goal! - total)} to go` : "Goal reached!"}</span></div>
+                )}
+              </div>
+              {c.cover_url && <img className="gl-campaign-cover gl-campaign-inline-image" src={c.cover_url} alt="" />}
+              <div className="gl-campaign-highlights">
+                <div><strong>{donorCount}</strong><span>Supporters</span></div>
+                <div><strong>{page.ambassadors.length}</strong><span>Ambassadors</span></div>
+                <div><strong>{page.teams.length}</strong><span>Teams</span></div>
+              </div>
+              {live && <Countdown endsAt={c.ends_at} />}
+              {!live && !draft && <div className="gl-campaign-ended">This campaign has ended. Thank you for your support.</div>}
+              {(live || draft) && <div className="gl-campaign-join-action"><Link href={`/${c.slug}/join`}>Become an ambassador <span aria-hidden="true">↗</span></Link></div>}
+              <div className="gl-campaign-inline-actions">
+                <a href="#community">Explore teams &amp; ambassadors ↓</a>
+                <a href="#share-campaign">Share this campaign ↗</a>
+              </div>
             </div>
-            <Progress value={total} goal={c.goal} />
-            <div className="stats num">
-              <div><b>{c.goal ? Math.round((total / c.goal) * 100) + "%" : "—"}</b><span>of goal</span></div>
-              <div><b>{donorCount}</b><span>donors</span></div>
-              <div><b>{page.ambassadors.length}</b><span>ambassadors</span></div>
-            </div>
-            {live ? <Link className="btn wide" href={`/${c.slug}/donate`}>Donate now</Link> : draft ? <div className="note-box" style={{ textAlign: "center" }}>The Donate button appears here when the campaign is Live.</div> : <div className="note-box" style={{ textAlign: "center" }}>This campaign has ended. Thank you to everyone who gave.</div>}
-            {(live || draft) && <Link className="btn ghost wide" href={`/${c.slug}/join`}>Become an ambassador</Link>}
-            {live && <Countdown endsAt={c.ends_at} />}
-          </aside>
+            {live ? (
+              <CampaignQuickDonate slug={c.slug} presets={c.preset_amounts} matchMultiplier={c.match_multiplier} matchingAvailable={matchingAvailable} />
+            ) : (
+              <div className="gl-campaign-ended-card">
+                <span>{draft ? "DRAFT PREVIEW" : "CAMPAIGN COMPLETE"}</span>
+                <h2>{draft ? "Your fundraising page is nearly ready." : "Thank you for making an impact."}</h2>
+                <p>{draft ? "Publish this campaign to activate donations." : "Explore other active campaigns to keep the giving going."}</p>
+                {draft ? <Link className="btn" href={`/admin/campaigns/${c.id}`}>Open in admin ↗</Link> : <Link className="btn" href="/">Explore campaigns ↗</Link>}
+              </div>
+            )}
+          </div>
         </div>
       </section>
-      <main className="page wrap">
+      <main className="page wrap gl-campaign-lower" id="community">
+        <div className="gl-campaign-section-title">
+          <span>THE PEOPLE BEHIND THE PROGRESS</span>
+          <h2>Every gift adds up.</h2>
+        </div>
         <CampaignTabs page={page} />
-        <div className="two" style={{ marginTop: 32 }}>
+        <div className="two gl-campaign-bottom" style={{ marginTop: 32 }}>
           {paragraphs(c.story).length > 0 ? (
-            <div className="story">{paragraphs(c.story).map((p, i) => <p key={i}>{p}</p>)}</div>
+            <section className="story"><h2 className="section-h" style={{ marginTop: 0 }}>About the campaign</h2>{paragraphs(c.story).map((p, i) => <p key={i}>{p}</p>)}</section>
           ) : <div />}
-          <ShareBox url={`${SITE_URL}/${c.slug}`} message={`Please support ${c.name} for The Lighthouse Project.`} />
+          <div id="share-campaign"><ShareBox url={`${SITE_URL}/${c.slug}`} message={`Please support ${c.name} for The Lighthouse Project.`} /></div>
         </div>
       </main>
-    </>
+    </div>
   );
 }
