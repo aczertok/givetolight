@@ -154,3 +154,140 @@ tr:last-child td { border-bottom: 0; }
   .amts { grid-template-columns: repeat(2, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+
+/* === Give to Light / fundraising-first visual refresh === */
+:root {
+  --bg:#fcfaf7; --surface:#fff; --sunk:#f4f0eb; --ink:#17233d; --muted:#697182;
+  --line:#e8e6e2; --navy:#101a32; --band:#fff9ef; --band-muted:#d9dce7;
+  --gold:#e9bb72; --gold-ink:#8e632a; --berry:#ae3d6b; --berry-soft:#faedf2;
+  --display:"Young Serif",Georgia,serif; --body:"Instrument Sans",system-ui,sans-serif;
+}
+body {background:#fcfaf7}
+.wrap {max-width:1240px;padding-left:clamp(20px,4vw,55px);padding-right:clamp(20px,4vw,55px)}
+.site-header {background:#101a32;border-bottom:1px solid rgba(255,255,255,.12);position:relative;z-index:2}
+.site-header .wrap {min-height:83px}
+.brand {font-size:21px;letter-spacing:-.04em}
+.brand small {letter-spacing:.085em;font-size:10px;text-transform:uppercase;margin-top:4px;color:#b5bdd0}
+.site-nav a {color:#d9dce7;font-size:13px;padding:10px 14px;border-radius:99px}
+.site-nav a[href="/ambassador"] {background:rgba(255,255,255,.1);color:#fff}
+.site-nav a:hover {background:rgba(255,255,255,.17);color:#fff}
+.gl-home-hero {position:relative;overflow:hidden;background:radial-gradient(circle at 91% 15%,#33466a 0%,transparent 38%),linear-gradient(135deg,#101a32 0%,#17253e 66%,#111f3c 100%);color:#fff;padding:76px 0 95px}
+.gl-glow {position:absolute;pointer-events:none;border-radius:50%;filter:blur(2px)}
+.gl-glow-one {width:460px;height:460px;top:-280px;right:-100px;background:radial-gradient(circle,rgba(238,189,114,.2),transparent 70%)}
+.gl-glow-two {width:430px;height:430px;bottom:-290px;left:18%;background:radial-gradient(circle,rgba(178,64,115,.17),transparent 73%)}
+.gl-home-grid {display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(34px,5vw,92px);align-items:center;position:relative;z-index:1}
+.gl-home-intro {padding:34px 0}
+.gl-eyebrow,.gl-overline,.gl-small-label {font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.gl-eyebrow {color:#e9bb72;display:flex;gap:10px;align-items:center}
+.gl-live-dot {display:inline-block;width:7px;height:7px;flex:none;background:#82d2ac;border-radius:50%;box-shadow:0 0 0 4px rgba(130,210,172,.13)}
+.gl-home-intro h1 {font-family:var(--display);font-size:clamp(48px,5.7vw,84px);line-height:1.12;font-weight:400;letter-spacing:-.055em;margin:25px 0}
+.gl-home-intro h1 em {font-style:italic;color:#e9bb72}
+.gl-home-intro p {font-size:clamp(16px,1.55vw,19px);line-height:1.75;color:#cbd2e1;max-width:480px;margin:0}
+.gl-hero-actions {display:flex;gap:22px;align-items:center;flex-wrap:wrap;margin-top:38px}
+.gl-primary-cta,.gl-banner-cta {text-decoration:none;background:#b64072;color:#fff;border-radius:999px;padding:17px 25px;display:inline-flex;align-items:center;justify-content:space-between;gap:28px;font-weight:700;box-shadow:0 10px 25px rgba(59,10,33,.12);transition:transform .2s,background .2s}
+.gl-primary-cta:hover,.gl-banner-cta:hover {background:#cc4f81;transform:translateY(-2px)}
+.gl-primary-cta span,.gl-banner-cta span {font-size:20px;font-weight:400}
+.gl-quiet-link {color:#fff;text-decoration:none;font-size:14px;font-weight:600;white-space:nowrap}
+.gl-quiet-link span {color:#e9bb72;margin-left:7px}
+.gl-hero-foot {color:#9faabd;font-size:12px;letter-spacing:.03em;margin-top:55px}
+.gl-heart {color:#e9bb72;margin-right:5px;font-size:15px}
+.gl-feature-wrap {width:100%;max-width:500px;justify-self:end}
+.gl-feature-card {background:#fff;color:#18243b;display:block;text-decoration:none;border-radius:22px;overflow:hidden;box-shadow:0 30px 75px rgba(0,0,0,.22);transition:transform .2s,box-shadow .2s}
+a.gl-feature-card:hover {transform:translateY(-5px);box-shadow:0 35px 90px rgba(0,0,0,.28)}
+.gl-feature-media {height:220px;position:relative;background:linear-gradient(125deg,#ebc78f,#c48e85 55%,#825a79);overflow:hidden}
+.gl-feature-media img,.gl-campaign-image img {height:100%;width:100%;object-fit:cover;transition:transform .4s}
+a.gl-feature-card:hover img,.gl-campaign-card:hover img {transform:scale(1.04)}
+.gl-feature-placeholder {display:grid;place-items:center}
+.gl-placeholder-symbol {font-size:135px;color:rgba(255,255,255,.5)}
+.gl-feature-status,.gl-card-status {position:absolute;left:20px;top:20px;background:#fff;color:#15223a;font-weight:800;font-size:10px;letter-spacing:.1em;border-radius:99px;padding:9px 14px;display:flex;align-items:center;gap:8px}
+.gl-feature-body {padding:29px 31px 25px}
+.gl-small-label {color:#a97547}
+.gl-feature-body h2 {font-family:var(--display);font-size:30px;line-height:1.22;letter-spacing:-.04em;font-weight:400;margin:13px 0}
+.gl-feature-body p {font-size:14px;color:#6a7180;line-height:1.55;margin:0 0 20px}
+.gl-progress-totals,.gl-card-numbers {display:flex;align-items:baseline;gap:12px;margin:26px 0 12px;flex-wrap:wrap}
+.gl-progress-totals strong {font-size:31px;letter-spacing:-.045em}
+.gl-progress-totals span,.gl-card-numbers span {font-size:12px;color:#78808e}
+.gl-feature-card .track {height:9px;background:#ececf0}
+.gl-feature-card .fill,.gl-campaign-card .fill {background:linear-gradient(90deg,#dfad58,#b64072)}
+.gl-feature-bottom,.gl-card-bottom {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:19px;font-size:12px;color:#7b8190}
+.gl-feature-bottom b,.gl-card-bottom b {color:#ae3d6b;white-space:nowrap}
+.gl-feature-bottom b span,.gl-card-bottom b span {margin-left:5px}
+.gl-coming-art {height:210px;background:radial-gradient(circle at center,#f5d6a3,#e9b36e 35%,#b77285 100%);display:grid;place-items:center}
+.gl-coming-sun {font-size:130px;color:rgba(255,255,255,.7);text-shadow:0 5px 30px rgba(255,255,255,.4)}
+.gl-feature-text-link {display:inline-block;margin-top:4px;text-decoration:none;font-size:14px;color:#ad3c70;font-weight:700}
+.gl-main {padding-top:75px;padding-bottom:85px}
+.gl-section-top {display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:27px}
+.gl-overline {color:#aa7d4b}
+.gl-section-top h2 {font-family:var(--display);font-size:clamp(29px,3.7vw,46px);font-weight:400;letter-spacing:-.05em;line-height:1.2;margin:12px 0 0}
+.gl-section-top h2 em {font-style:italic;color:#b64072}
+.gl-live-count {font-size:12px;color:#596679;background:#eaf4ed;padding:9px 15px;display:flex;align-items:center;gap:10px;border-radius:99px}
+.gl-live-count .gl-live-dot {background:#40996d;box-shadow:none}
+.gl-campaign-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.gl-campaign-card {min-width:0;background:#fff;color:#18243b;border:1px solid #ece8e4;border-radius:17px;overflow:hidden;text-decoration:none;box-shadow:0 8px 24px rgba(22,26,37,.035);transition:transform .2s,box-shadow .2s}
+.gl-campaign-card:hover {transform:translateY(-5px);box-shadow:0 18px 35px rgba(22,26,37,.09)}
+.gl-campaign-image {height:195px;position:relative;overflow:hidden;background:linear-gradient(135deg,#d3adc2,#e7be8b)}
+.gl-campaign-placeholder {display:grid;height:100%;place-items:center;font-size:94px;color:rgba(255,255,255,.65)}
+.gl-card-status {font-size:9px;padding:7px 11px;top:16px;left:16px}
+.gl-campaign-content {padding:24px}
+.gl-campaign-content h3 {font-family:var(--display);font-size:23px;font-weight:400;letter-spacing:-.04em;margin:0 0 8px}
+.gl-campaign-content p {color:#7a8190;font-size:13px;line-height:1.55;min-height:20px;margin:0}
+.gl-card-numbers {margin:24px 0 11px}
+.gl-card-numbers strong {font-size:23px;letter-spacing:-.035em}
+.gl-campaign-content .track {background:#edf0f1}
+.gl-empty-campaigns {border:1px dashed #ddd6cc;background:#fff;border-radius:18px;text-align:center;padding:62px 24px}
+.gl-empty-spark {font-size:49px;color:#d2a15e}
+.gl-empty-campaigns h3 {font-family:var(--display);font-weight:400;font-size:27px;margin:12px 0}
+.gl-empty-campaigns p {color:#7c8290}
+.gl-past-campaigns {margin-top:85px}
+.gl-bottom-banner {display:flex;align-items:center;justify-content:space-between;gap:30px;margin-top:90px;padding:45px 50px;border-radius:21px;background:#18253e;color:white}
+.gl-bottom-banner .gl-overline {color:#e9bb72}
+.gl-bottom-banner h2 {font-family:var(--display);font-size:30px;font-weight:400;letter-spacing:-.04em;margin:13px 0 8px}
+.gl-bottom-banner p {color:#c4cede;font-size:14px;margin:0}
+.gl-banner-cta {background:#e7b967;color:#17243a;white-space:nowrap}
+.gl-banner-cta:hover {background:#f1c785}
+.site-footer {background:#101a32;color:#adb7cc;border:none;font-size:12px;padding-block:30px}
+/* Campaigns retain existing payment and backend logic, with premium hero/cards */
+.hero {background:radial-gradient(circle at 100% 0%,#33476b 0%,transparent 36%),#101a32;padding-top:32px;padding-bottom:58px}
+.hero .wrap {grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:clamp(30px,5vw,70px);align-items:center}
+.hero h1 {font-size:clamp(36px,4.8vw,66px);letter-spacing:-.055em;line-height:1.14;margin:18px 0}
+.hero .lede {font-size:17px;line-height:1.7;color:#d9dfeb}
+.hero .cover {aspect-ratio:16/8.8;border-radius:17px;box-shadow:0 15px 45px rgba(0,0,0,.15)}
+.tally {border-radius:20px;padding:30px;box-shadow:0 25px 60px rgba(0,0,0,.15);gap:18px}
+.raised {font-size:clamp(37px,4vw,52px);letter-spacing:-.04em}
+.tally .track {height:11px}
+.tally .fill {background:linear-gradient(90deg,#e4b964,#b43b70)}
+.tally .btn {font-size:17px;padding:18px;border-radius:12px}
+.btn {background:#ae3d6b;border-radius:10px}
+.btn:hover {background:#c14b7b}
+.card,.panel,.story,.donors,.tw,.kpi {border-radius:15px}
+.card {transition:transform .2s,box-shadow .2s}
+a.card:hover {transform:translateY(-3px);box-shadow:0 12px 25px rgba(0,0,0,.06)}
+@media(max-width:960px) {
+ .gl-home-grid {gap:35px}
+ .gl-home-intro h1 {font-size:clamp(44px,5.5vw,65px)}
+ .gl-campaign-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px) {
+ .gl-home-hero {padding:40px 0 65px}
+ .gl-home-grid {grid-template-columns:1fr;gap:22px}
+ .gl-home-intro {padding:0}
+ .gl-home-intro h1 {font-size:clamp(41px,9vw,62px)}
+ .gl-home-intro p {font-size:16px}
+ .gl-hero-foot {display:none}
+ .gl-feature-wrap {max-width:none;justify-self:stretch}
+ .gl-feature-media {height:170px}
+ .gl-main {padding-top:55px}
+ .gl-campaign-grid {grid-template-columns:1fr}
+ .gl-campaign-image {height:215px}
+ .gl-bottom-banner {padding:32px 25px;flex-direction:column;align-items:flex-start;margin-top:65px}
+ .gl-section-top h2 {font-size:33px}
+ .hero .wrap {grid-template-columns:1fr}
+ .hero .cover {aspect-ratio:16/9}
+ .site-header .wrap {gap:7px;padding-block:12px}
+ .site-nav {width:100%;justify-content:space-between}
+ .site-nav a {font-size:12px;padding:7px 8px}
+}
+@media(prefers-reduced-motion:reduce) {
+ .gl-primary-cta,.gl-banner-cta,.gl-feature-card,.gl-campaign-card,.gl-feature-media img,.gl-campaign-image img {transition:none}
+}
