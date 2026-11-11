@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { supabaseBrowser } from "@/lib/supabase/browser";
+import { createClient } from "@supabase/supabase-js";
 
 export default function LoginForm({ next }: { next: string }) {
   const [email, setEmail] = useState("");
@@ -11,9 +11,11 @@ export default function LoginForm({ next }: { next: string }) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setErr("Enter a valid email.");
     setErr("");
     setState("sending");
-    const { error } = await supabaseBrowser().auth.signInWithOtp({
+    // "implicit" so the emailed link carries the session itself and works in any browser
+    const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL || "", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "", { auth: { flowType: "implicit", persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } });
+    const { error } = await sb.auth.signInWithOtp({
       email: email.trim().toLowerCase(),
-      options: { emailRedirectTo: `${location.origin}/auth/confirm?next=${encodeURIComponent(next)}` },
+      options: { emailRedirectTo: `${location.origin}/auth/finish?next=${encodeURIComponent(next)}` },
     });
     if (error) { setErr(error.message); setState("idle"); return; }
     setState("sent");
