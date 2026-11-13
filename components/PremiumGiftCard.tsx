@@ -6,12 +6,13 @@ import { money } from "@/lib/format";
 
 type Props = {
   slug: string;
+  campaignName: string;
   presets: number[];
   matchMultiplier: number;
   matchingAvailable: boolean;
 };
 
-export default function PremiumGiftCard({ slug, presets, matchMultiplier, matchingAvailable }: Props) {
+export default function PremiumGiftCard({ slug, campaignName, presets, matchMultiplier, matchingAvailable }: Props) {
   const amounts = [...new Set(presets.filter((n) => Number.isFinite(n) && n >= 1 && n <= 250000))].slice(0, 4);
   const suggestions = amounts.length >= 3 ? amounts : [72, 180, 360, 1000];
   const [selected, setSelected] = useState(suggestions[1] ?? suggestions[0]);
@@ -27,9 +28,9 @@ export default function PremiumGiftCard({ slug, presets, matchMultiplier, matchi
   return (
     <>
       <aside className="pv-gift" id="donate" aria-label="Make a donation">
-        <div className="pv-gift-topline"><span className="pv-gift-spark" aria-hidden="true">✦</span><span>MAKE YOUR IMPACT</span></div>
-        <h2>Be the reason<br/><em>someone smiles.</em></h2>
-        <p className="pv-gift-helper">Choose your gift and continue to secure checkout.</p>
+        <div className="pv-gift-topline"><span>DONATE TO THE LIGHTHOUSE</span></div>
+        <h2>Support {campaignName}</h2>
+        <p className="pv-gift-helper">Select an amount to contribute to this campaign.</p>
         <div className="pv-frequency" role="group" aria-label="Gift frequency">
           <button type="button" aria-pressed={frequency === "once"} onClick={() => setFrequency("once")}>Give once</button>
           <button type="button" aria-pressed={frequency === "monthly"} onClick={() => setFrequency("monthly")}>Give monthly</button>
@@ -55,6 +56,10 @@ export default function PremiumGiftCard({ slug, presets, matchMultiplier, matchi
           <div className="pv-gift-error" role="alert">Enter an amount between $1 and $250,000.</div>
         }
         <p className="pv-secure"><span aria-hidden="true">🔒</span> Secure giving · Card · Digital wallet · Bank · DAF</p>
+        <div className="pv-ambassador-secondary">
+          <span>Want to raise money with your own page?</span>
+          <Link href={`/${slug}/join`}>Become an Ambassador <span aria-hidden="true">↗</span></Link>
+        </div>
       </aside>
       <div className="pv-mobile-bar" aria-label="Continue to donation checkout">
         {valid ?
