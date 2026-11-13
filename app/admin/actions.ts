@@ -240,7 +240,9 @@ export async function setCampaignStatus(fd: FormData) {
   const { sb } = await requireAdmin();
   const id = str(fd, "id", 60);
   const status = str(fd, "status", 10);
-  if (["draft", "live", "ended"].includes(status)) await sb.from("campaigns").update({ status }).eq("id", id);
+  if (!["draft", "live", "ended"].includes(status)) redirect(`/admin/campaigns/${id}?error=save`);
+  const { error } = await sb.from("campaigns").update({ status }).eq("id", id);
+  if (error) redirect(`/admin/campaigns/${id}?error=save`);
   revalidatePath("/", "layout");
   redirect(`/admin/campaigns/${id}?saved=1`);
 }

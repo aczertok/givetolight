@@ -27,7 +27,7 @@ export default async function EditCampaign({ params, searchParams }: { params: P
           <p><span className={`pill ${c.status === "live" ? "ok" : c.status === "draft" ? "wait" : "off"}`}>{c.status}</span> · <a href={`/${c.slug}`} target="_blank" rel="noreferrer">{url}</a>{c.status === "draft" && " · only staff can see it"}</p>
         </div>
         <div className="acts">
-          {c.status !== "live" && <form action={setCampaignStatus}><input type="hidden" name="id" value={c.id} /><button className="btn" name="status" value="live">{c.status === "draft" ? "Go live" : "Reopen"}</button></form>}
+          {c.status !== "live" && <form action={setCampaignStatus}><input type="hidden" name="id" value={c.id} /><input type="hidden" name="status" value="live" /><button className="btn" type="submit">{c.status === "draft" ? "Go live" : "Reopen"}</button></form>}
           <Link className="btn ghost" href={`/admin/campaigns/${c.id}/dashboard`}>Dashboard</Link>
           <a className="btn ghost" href={`/${c.slug}`} target="_blank" rel="noreferrer">{c.status === "draft" ? "Preview page" : "View page"}</a>
         </div>
