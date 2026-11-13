@@ -43,6 +43,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
             <div className="pv-kicker"><span className="pv-status-dot" /> {live ? "FUNDRAISING NOW" : draft ? "DRAFT CAMPAIGN" : "CAMPAIGN COMPLETE"} <span className="pv-kicker-line" /><span>THE LIGHTHOUSE PROJECT</span></div>
             <h1>{c.name}</h1>
             {c.tagline && <p className="pv-tagline">{c.tagline}</p>}
+            {(live || draft) && <Link className="pv-ambassador-hero" href={`/${c.slug}/join`}>Become an Ambassador <span aria-hidden="true">↗</span></Link>}
             <div className="pv-photo-space">
               {c.cover_url ? (
                 <img className="pv-hero-image" src={c.cover_url} alt={`Campaign image for ${c.name}`} />
@@ -63,12 +64,11 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
             {live && <Countdown endsAt={c.ends_at} />}
 
             <div className="pv-under-hero-actions">
-              {(live || draft) && <Link href={`/${c.slug}/join`}>Become an ambassador <span aria-hidden="true">↗</span></Link>}
               <a href="#community">Meet our fundraisers <span aria-hidden="true">↓</span></a>
             </div>
           </div>
           {live ? (
-            <PremiumGiftCard slug={c.slug} presets={c.preset_amounts} matchMultiplier={c.match_multiplier} matchingAvailable={matchingAvailable}/>
+            <PremiumGiftCard slug={c.slug} campaignName={c.name} presets={c.preset_amounts} matchMultiplier={c.match_multiplier} matchingAvailable={matchingAvailable}/>
           ) : (
             <aside className="pv-campaign-closed"><span>{draft ? "DRAFT PREVIEW" : "CAMPAIGN COMPLETED"}</span><h2>{draft ? "Your campaign is nearly ready." : "Thank you for your generosity."}</h2><p>{draft ? "Publish the campaign to activate donations." : "This campaign is no longer taking donations."}</p>{draft ? <Link href={`/admin/campaigns/${c.id}`} className="pv-give-button">Open in admin →</Link> : <Link href="/" className="pv-give-button">Other campaigns →</Link>}</aside>
           )}
