@@ -8,6 +8,7 @@ import CampaignTabs from "@/components/CampaignTabs";
 import PremiumGiftCard from "@/components/PremiumGiftCard";
 import Countdown from "@/components/Countdown";
 import ShareBox from "@/components/ShareBox";
+import VolleyballCampaign from "@/components/VolleyballCampaign";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
   const { campaign: slug } = await params;
   const page = await getCampaignPage(slug);
   if (!page) notFound();
+  if (slug.toLowerCase() === "volley2027") return <VolleyballCampaign page={page} />;
   const { campaign: c, total, donorCount } = page;
   const live = c.status === "live";
   const draft = c.status === "draft";
