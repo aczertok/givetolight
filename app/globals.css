@@ -473,3 +473,18 @@ body:has(.pv-page) .site-footer{background:#f7f4ef;color:#75808a;border-top:1px 
 .gl-checkout-optional summary{font-size:13px;font-weight:650;cursor:pointer}
 .gl-checkout-extra-fields{display:grid;gap:13px;margin-top:15px}
 .gl-fee-option{font-size:13px}
+
+
+/* Mobile image and dominant centered donation action */
+.pv-photo-space{width:100%;margin-top:22px}
+.pv-photo-space .pv-hero-image{margin-top:0;width:100%;height:clamp(180px,22vw,260px);object-fit:cover;border-radius:15px}
+.pv-photo-space .pv-photo-placeholder{margin-top:0;width:100%;min-height:180px}
+@media(max-width:640px){
+  .pv-photo-space{display:block;margin-top:17px;margin-bottom:14px}
+  .pv-photo-space .pv-hero-image{display:block;width:100%;height:190px;aspect-ratio:16/9;object-fit:cover;border-radius:12px}
+  .pv-photo-space .pv-photo-placeholder{display:flex;min-height:178px;border-radius:12px;padding:18px}
+  .pv-mobile-bar{justify-content:center;padding:12px max(16px,env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .pv-mobile-button{width:100%;max-width:520px;min-height:61px;justify-content:center;text-align:center;font-size:17px;letter-spacing:.025em;border-radius:12px;box-shadow:0 7px 20px rgba(162,44,97,.19)}
+  .pv-give-button{display:flex;width:100%;justify-content:center;text-align:center;font-size:17px}
+  .pv-gift{padding-bottom:21px}
+}
