@@ -6,7 +6,7 @@ import DonateForm from "@/components/DonateForm";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Donate" };
 
-export default async function DonatePage({ params, searchParams }: { params: Promise<{ campaign: string }>; searchParams: Promise<{ a?: string; t?: string }> }) {
+export default async function DonatePage({ params, searchParams }: { params: Promise<{ campaign: string }>; searchParams: Promise<{ a?: string; t?: string; amount?: string; plan?: string }> }) {
   const { campaign } = await params;
   const sp = await searchParams;
   const page = await getCampaignPage(campaign);
@@ -26,6 +26,8 @@ export default async function DonatePage({ params, searchParams }: { params: Pro
         initialAmbassador={sp.a || ""}
         initialTeam={sp.t || ""}
         chariotCid={process.env.NEXT_PUBLIC_CHARIOT_CID || ""}
+        initialAmount={sp.amount && Number.isFinite(Number(sp.amount)) && Number(sp.amount) >= 1 && Number(sp.amount) <= 250000 ? Math.round(Number(sp.amount) * 100) / 100 : undefined}
+        initialPlan={sp.plan === "monthly" ? "monthly" : "once"}
       />
     </main>
   );
