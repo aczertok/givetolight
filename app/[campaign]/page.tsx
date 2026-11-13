@@ -35,7 +35,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
     <div className="pv-page">
       {draft && <div className="draft-bar"><div className="wrap">Draft preview: only staff can see this page. Visitors see it once you set the campaign to <b>Live</b>. <Link href={`/admin/campaigns/${c.id}`}>Open in admin →</Link></div></div>}
       {live && matchingAvailable && (
-        <div className="pv-match-banner"><span aria-hidden="true">✧</span> DOUBLE YOUR IMPACT <span aria-hidden="true">✧</span> <span className="pv-match-banner-sub">Eligible gifts may be matched up to {c.match_multiplier}× while funds last</span></div>
+        <div className="pv-match-banner"><span aria-hidden="true">✧</span> MATCHING GIFTS AVAILABLE <span aria-hidden="true">✧</span> <span className="pv-match-banner-sub">Eligible gifts may be matched up to {c.match_multiplier}× while funds last</span></div>
       )}
       <section className="pv-hero">
         <div className="wrap pv-hero-inner">
