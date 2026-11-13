@@ -488,3 +488,20 @@ body:has(.pv-page) .site-footer{background:#f7f4ef;color:#75808a;border-top:1px 
   .pv-give-button{display:flex;width:100%;justify-content:center;text-align:center;font-size:17px}
   .pv-gift{padding-bottom:21px}
 }
+
+
+/* Campaign-specific language and visible ambassador sign-up */
+.pv-gift h2{font-family:var(--display);font-weight:400;font-size:clamp(27px,2.7vw,34px);line-height:1.22;letter-spacing:-.032em;margin:1px 0 0}
+.pv-gift-topline{font-size:10px;letter-spacing:.13em;color:#8b6577;font-weight:800}
+.pv-ambassador-hero{display:inline-flex;align-items:center;justify-content:center;gap:14px;border:1.5px solid #a43e71;border-radius:9px;padding:13px 17px;color:#9b2e62!important;font-size:13px;font-weight:800;text-decoration:none;background:#fff;transition:background .15s}
+.pv-ambassador-hero:hover{background:#f9eaf1}
+.pv-ambassador-secondary{display:grid;gap:9px;border-top:1px solid #eee6e8;margin-top:6px;padding-top:17px;text-align:center}
+.pv-ambassador-secondary>span{font-size:12px;color:#6c7583}
+.pv-ambassador-secondary>a{display:flex;justify-content:center;align-items:center;gap:10px;padding:13px 15px;border:1.5px solid #ac4272;border-radius:10px;color:#9e3065;text-decoration:none;font-size:14px;font-weight:800;background:#fff}
+.pv-ambassador-secondary>a:hover{background:#fbedf2}
+@media(max-width:640px){
+  .pv-ambassador-hero{display:flex;width:100%;min-height:49px;margin:9px 0 0}
+  .pv-photo-space{margin-top:17px}
+  .pv-gift h2{font-size:27px}
+  .pv-ambassador-secondary>a{min-height:49px}
+}
