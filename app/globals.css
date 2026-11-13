@@ -463,3 +463,13 @@ body:has(.pv-page) .brand small{color:#777d8b;font-size:10px;letter-spacing:.075
  .pv-story{padding:20px}
 }
 @media(prefers-reduced-motion:reduce){.pv-give-button{transition:none}}
+
+
+/* Donation checkout follows the campaign's refined styling */
+body:has(.pv-page) .site-footer{background:#f7f4ef;color:#75808a;border-top:1px solid #e8e3de}
+.gl-checkout-heading{font-size:17px;font-weight:750;color:var(--ink);display:grid;gap:3px;line-height:1.3}
+.gl-checkout-heading span{font-size:12px;color:var(--muted);font-weight:400}
+.gl-checkout-optional{padding:13px 15px;border:1px solid var(--line);border-radius:10px}
+.gl-checkout-optional summary{font-size:13px;font-weight:650;cursor:pointer}
+.gl-checkout-extra-fields{display:grid;gap:13px;margin-top:15px}
+.gl-fee-option{font-size:13px}
