@@ -57,10 +57,11 @@ export default function PremiumGiftCard({ slug, presets, matchMultiplier, matchi
         <p className="pv-secure"><span aria-hidden="true">🔒</span> Secure giving · Card · Digital wallet · Bank · DAF</p>
       </aside>
       <div className="pv-mobile-bar" aria-label="Continue to donation checkout">
-        <div className="pv-mobile-sum"><strong>{valid ? money(amount) : "Your gift"}</strong><span>{frequency === "monthly" ? "Monthly" : "One-time"}</span></div>
         {valid ?
-          <Link href={url} className="pv-mobile-button">Donate now <span aria-hidden="true">→</span></Link> :
-          <a href="#donate" className="pv-mobile-button">Choose amount <span aria-hidden="true">↑</span></a>}
+          <Link href={url} className="pv-mobile-button">
+            DONATE {money(amount)}{frequency === "monthly" ? " MONTHLY" : " NOW"} <span aria-hidden="true">→</span>
+          </Link> :
+          <a href="#donate" className="pv-mobile-button">CHOOSE AN AMOUNT <span aria-hidden="true">↑</span></a>}
       </div>
     </>
   );
