@@ -43,6 +43,13 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
             <div className="pv-kicker"><span className="pv-status-dot" /> {live ? "FUNDRAISING NOW" : draft ? "DRAFT CAMPAIGN" : "CAMPAIGN COMPLETE"} <span className="pv-kicker-line" /><span>THE LIGHTHOUSE PROJECT</span></div>
             <h1>{c.name}</h1>
             {c.tagline && <p className="pv-tagline">{c.tagline}</p>}
+            <div className="pv-photo-space">
+              {c.cover_url ? (
+                <img className="pv-hero-image" src={c.cover_url} alt={`Campaign image for ${c.name}`} />
+              ) : (
+                <div className="pv-photo-placeholder" aria-label="Campaign image placeholder"><span>THE LIGHTHOUSE PROJECT</span><div>Every gift<br/>makes a difference.</div></div>
+              )}
+            </div>
             <div className="pv-progress-area">
               <div className="pv-total"><strong className="num">{money(total)}</strong><span>{c.goal ? `raised of ${money(c.goal)}` : "raised so far"}</span></div>
               <Progress value={total} goal={c.goal} />
@@ -54,8 +61,7 @@ export default async function CampaignPage({ params }: { params: Promise<{ campa
               <div><strong className="num">{page.teams.length}</strong><span>teams</span></div>
             </div>
             {live && <Countdown endsAt={c.ends_at} />}
-            {c.cover_url && <img className="pv-hero-image" src={c.cover_url} alt={`Campaign image for ${c.name}`} />}
-            {!c.cover_url && <div className="pv-photo-placeholder" aria-hidden="true"><span>THE LIGHTHOUSE PROJECT</span><div>Every gift<br/>makes a difference.</div></div>}
+
             <div className="pv-under-hero-actions">
               {(live || draft) && <Link href={`/${c.slug}/join`}>Become an ambassador <span aria-hidden="true">↗</span></Link>}
               <a href="#community">Meet our fundraisers <span aria-hidden="true">↓</span></a>
