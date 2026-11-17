@@ -46,7 +46,6 @@ export default function GiveCard({ slug, presets, matchMultiplier, matchingAvail
   return (
     <>
       <section className="lc-give" id="donate" ref={ref} aria-labelledby="give-title">
-        {match && <div className="lc-give-match"><b>{matchMultiplier}×</b> Every dollar you give is matched</div>}
         <div className="lc-give-body">
           <h2 id="give-title">{title}</h2>
           <div className="lc-plan" role="group" aria-label="How often">
@@ -78,13 +77,7 @@ export default function GiveCard({ slug, presets, matchMultiplier, matchingAvail
           ) : (
             <p className="lc-give-err" role="alert">Enter an amount from $1 to $250,000.</p>
           )}
-          <div className="lc-trust">
-            <span><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" /><path d="M7 9V6.5a3 3 0 0 1 6 0V9" /></svg>Secure checkout</span>
-            <span>Tax-deductible</span>
-          </div>
-          <div className="lc-methods" aria-label="Ways to pay">
-            <span>Card</span><span>Apple Pay</span><span>Google Pay</span><span>Bank</span>{daf && <span>DAF</span>}
-          </div>
+          <p className="lc-trust"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" /><path d="M7 9V6.5a3 3 0 0 1 6 0V9" /></svg>Secure · Tax-deductible · Card, Apple Pay, bank{daf ? ", DAF" : ""}</p>
         </div>
       </section>
       <div className={"lc-bar" + (inView ? "" : " show")} aria-hidden={inView}>

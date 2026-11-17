@@ -37,7 +37,6 @@ export default async function DonatePage({ params, searchParams }: { params: Pro
       </main>
       <aside className="lc-sum">
         <div className="lc-sum-card">
-          <div className="lc-beam" aria-hidden="true" />
           <small>{amb ? `Supporting ${amb.name}` : team ? `Supporting team ${team.name}` : "You're supporting"}</small>
           <h2>{c.name}</h2>
           <div className="lc-raised num">{money(page.total)}</div>
