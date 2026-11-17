@@ -22,7 +22,7 @@ declare global {
   }
 }
 
-const CHAI: Record<number, string> = { 36: "2× chai", 180: "10× chai", 360: "20× chai", 1800: "100× chai" };
+const CHAI: Record<number, string> = { 18: "chai", 36: "2× chai", 54: "3× chai", 72: "4× chai", 180: "10× chai", 360: "20× chai", 1800: "100× chai" };
 
 export default function DonateForm({ campaign, ambassadors, teams, initialAmbassador, initialTeam, chariotCid, initialAmount, initialPlan = "once" }: Props) {
   const [preset, setPreset] = useState<number | null>(initialAmount ?? campaign.presets[1] ?? campaign.presets[0] ?? 180);
@@ -37,7 +37,8 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
 
   const amount = custom !== "" ? Math.round(Number(custom) * 100) / 100 : preset || 0;
   const perPayment = plan === "installments" ? amount / months : amount;
-  const fee = f.coverFee ? Math.round(((perPayment + 0.3) / (1 - 0.029) - perPayment) * 100) / 100 : 0;
+  const feeAmt = perPayment > 0 ? Math.round(((perPayment + 0.3) / (1 - 0.029) - perPayment) * 100) / 100 : 0;
+  const fee = f.coverFee ? feeAmt : 0;
 
   const form = () => ({
     campaign: campaign.slug,
@@ -188,7 +189,7 @@ export default function DonateForm({ campaign, ambassadors, teams, initialAmbass
           <label className="chk"><input type="checkbox" checked={f.anonymous} onChange={set("anonymous")} /> Show my name as Anonymous</label>
         </div>
       </details>
-      <label className="chk gl-fee-option"><input type="checkbox" checked={f.coverFee} onChange={set("coverFee")} /> <span className="num">Add {money(fee || 0, true)} to help cover processing fees (optional)</span></label>
+      <label className="chk gl-fee-option"><input type="checkbox" checked={f.coverFee} onChange={set("coverFee")} /> <span className="num">Add {money(feeAmt, true)} to help cover processing fees (optional)</span></label>
       <div className="total num"><span>{plan === "once" ? "Total" : "Charged today"}</span><span>{money(perPayment + fee, true)}</span></div>
       {err && <p className="error" role="alert">{err}</p>}
       <div className="pay-label">Choose how to pay</div>
