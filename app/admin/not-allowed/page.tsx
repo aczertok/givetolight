@@ -10,7 +10,7 @@ export default async function NotAllowed() {
       <p>Make sure you used the same email address as your existing Lighthouse admin account. If this is your correct email, your staff role needs to be checked in the site administrator settings.</p>
       <div className="acts">
         <Link className="btn ghost" href="/account">Check my account</Link>
-        <Link className="btn ghost" href="/login?next=/admin">Return to login</Link>
+        <form action="/auth/logout" method="post"><button type="submit" className="btn ghost">Sign out and use a different account</button></form>
       </div>
     </div>
   );
