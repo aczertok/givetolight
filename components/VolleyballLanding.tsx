@@ -66,7 +66,7 @@ export default function VolleyballLanding({ page }: { page: CampaignPage }) {
         </section>
         <section className="vl-supporters lc-wrap" id="supporters">
           <div className="vl-section-head"><div><span>OUR FUNDRAISING COMMUNITY</span><h2>The people behind it.</h2></div><a href="#donate">Make a donation →</a></div>
-          <Supporters page={page} canJoin={live || draft}/>
+          <Supporters page={page} canJoin={live || draft} donationFilters/>
         </section>
         {stories.length > 0 && <section className="vl-about lc-wrap" id="about"><span>WHAT YOU'RE SUPPORTING</span><h2>About the Lighthouse</h2>{stories.map((s,i)=><p key={i}>{s}</p>)}</section>}
         {(live || draft) && <section className="vl-ambassador" id="join"><div className="vl-ambassador-inner"><div className="vl-amb-kicker">GET IN THE GAME</div><h2>Bring your friends.<br/>Build your team.</h2><p>Start your own fundraising page and help make Volleyball 2027 a success.</p><Link href={`/${c.slug}/join`} className="vl-amb-button">BECOME AN AMBASSADOR <span aria-hidden="true">↗</span></Link></div></section>}
