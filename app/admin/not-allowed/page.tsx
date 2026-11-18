@@ -1,12 +1,17 @@
+import Link from "next/link";
 import { currentUser } from "@/lib/supabase/server";
 
 export default async function NotAllowed() {
   const user = await currentUser();
   return (
     <div className="panel" style={{ maxWidth: 620 }}>
-      <h2>This area is for Lighthouse staff</h2>
-      <p>You&apos;re logged in as {user?.email}, which isn&apos;t a staff account. If you should have access, ask Alex to add you.</p>
-      <p className="meta">Adding a staff member: in Supabase, open SQL Editor and run <code>insert into admins (user_id) select id from auth.users where email = &apos;their@email.com&apos;;</code> after they&apos;ve logged in here once.</p>
+      <h2>Staff access isn't enabled for this account</h2>
+      <p>You are signed in as <b>{user?.email || "an unrecognized account"}</b>, but this account does not currently have staff permissions.</p>
+      <p>Make sure you used the same email address as your existing Lighthouse admin account. If this is your correct email, your staff role needs to be checked in the site administrator settings.</p>
+      <div className="acts">
+        <Link className="btn ghost" href="/account">Check my account</Link>
+        <form action="/auth/logout" method="post"><button type="submit" className="btn ghost">Sign out and use a different account</button></form>
+      </div>
     </div>
   );
 }
