@@ -17,7 +17,7 @@ export default async function TeamPage({ params }: { params: Promise<{ campaign:
   const members = page.ambassadors.filter((a) => a.team_id === t.id);
   const ids = new Set(members.map((m) => m.id));
   const ds = page.donations.filter((d) => d.team_id === t.id || (d.ambassador_id && ids.has(d.ambassador_id)));
-  const raised = t.raised * page.factor;
+  const raised = t.raised * (c.slug.toLowerCase() === "volley2027" ? 1 : page.factor);
   const names = new Map(members.map((m) => [m.id, m.name]));
   return (
     <>
@@ -42,7 +42,7 @@ export default async function TeamPage({ params }: { params: Promise<{ campaign:
             {members.map((a, i) => (
               <Link key={a.id} className="card" href={`/${c.slug}/${a.slug}`}>
                 <div className="who"><Avatar name={a.name} photo={a.photo_url} /><div><div className="rank">#{i + 1}</div><h3>{a.name}</h3></div></div>
-                <Progress value={a.raised * page.factor} goal={a.goal} small />
+                <Progress value={a.raised * (c.slug.toLowerCase() === "volley2027" ? 1 : page.factor)} goal={a.goal} small />
                 <div className="row num"><b>{money(a.raised * page.factor)}</b><span className="meta">{a.goal ? `of ${money(a.goal)}` : ""}</span></div>
               </Link>
             ))}

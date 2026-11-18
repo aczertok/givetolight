@@ -10,7 +10,7 @@ type Props = {
   initialTeam: string;
   chariotCid: string;
   initialAmount?: number;
-  initialPlan?: "once" | "monthly";
+  initialPlan?: "once" | "monthly" | "installments";
 };
 
 declare global {
