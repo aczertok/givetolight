@@ -676,3 +676,10 @@ body:has(.vl) .site-footer{background:#0d1830;border-top:0;color:#c0c9d8}
  .vl .vl-sticky .lc-cta{min-height:60px;font-size:18px}
 }
 @media(prefers-reduced-motion:reduce){.vl-progress div{transition:none}}
+
+
+.vl-donation-filters{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:13px 4px 18px}
+.vl-donation-bands{display:flex;flex-wrap:wrap;gap:7px}
+.vl-donation-bands button{cursor:pointer;border:1px solid #dadde2;background:#fff;color:#566172;font-size:11px;font-weight:750;padding:9px 12px;border-radius:24px}
+.vl-donation-bands button[aria-pressed=true]{background:#162c4d;color:#fff;border-color:#162c4d}
+.vl-donation-filters select{padding:9px 12px;border:1px solid #dadde2;background:#fff;color:#3e4e63;border-radius:9px;font-size:12px;min-width:140px}
