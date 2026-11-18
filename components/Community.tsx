@@ -8,7 +8,7 @@ import type { CampaignPage } from "@/lib/data";
 type Tab = "ambassadors" | "teams" | "donors";
 
 /** One panel for everyone behind the campaign: ambassadors, teams and donors. */
-export default function Supporters({ page, canJoin }: { page: CampaignPage; canJoin: boolean }) {
+export default function Supporters({ page, canJoin, donationFilters = false }: { page: CampaignPage; canJoin: boolean; donationFilters?: boolean }) {
   const { ambassadors, teams, donations, factor, campaign } = page;
   const tabs: [Tab, string, number][] = [];
   if (ambassadors.length) tabs.push(["ambassadors", "Ambassadors", ambassadors.length]);
@@ -17,13 +17,24 @@ export default function Supporters({ page, canJoin }: { page: CampaignPage; canJ
   const [tab, setTab] = useState<Tab>(tabs[0][0]);
   const [q, setQ] = useState("");
   const [limit, setLimit] = useState(12);
+  const [minGift, setMinGift] = useState("all");
+  const [sortGifts, setSortGifts] = useState<"recent" | "high" | "low">("recent");
   const names = useMemo(() => new Map(ambassadors.map((a) => [a.id, a.name])), [ambassadors]);
   const ql = q.trim().toLowerCase();
   const pick = (t: Tab) => { setTab(t); setQ(""); setLimit(12); };
 
   const people = tab === "teams" ? teams : ambassadors;
   const shownPeople = people.filter((x) => !ql || x.name.toLowerCase().includes(ql) || ("teamName" in x && x.teamName?.toLowerCase().includes(ql)));
-  const shownGifts = donations.filter((d) => !ql || d.display_name.toLowerCase().includes(ql) || (d.ambassador_id && names.get(d.ambassador_id)?.toLowerCase().includes(ql)));
+  const shownGifts = donations.filter(d => {
+    const amount = Number(d.amount);
+    const inRange = !donationFilters || minGift === "all" || minGift === "1000" && amount >= 1000 ||
+      minGift === "500" && amount >= 500 && amount < 1000 ||
+      minGift === "180" && amount >= 180 && amount < 500 ||
+      minGift === "under" && amount < 180;
+    return inRange && (!ql || d.display_name.toLowerCase().includes(ql) || (d.ambassador_id && names.get(d.ambassador_id)?.toLowerCase().includes(ql)));
+  }).sort((a,b) => !donationFilters || sortGifts === "recent"
+      ? new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      : sortGifts === "high" ? Number(b.amount) - Number(a.amount) : Number(a.amount) - Number(b.amount));
   const total = tab === "donors" ? shownGifts.length : shownPeople.length;
 
   return (
@@ -39,9 +50,19 @@ export default function Supporters({ page, canJoin }: { page: CampaignPage; canJ
         )}
       </div>
 
+      {tab === "donors" && donationFilters && <div className="vl-donation-filters">
+        <div className="vl-donation-bands" role="group" aria-label="Filter donations by amount">
+          {([["all","All gifts"],["1000","$1,000+"],["500","$500–999"],["180","$180–499"],["under","Under $180"]] as const).map(([key,label]) => (
+            <button type="button" key={key} aria-pressed={minGift === key} onClick={() => { setMinGift(key); setLimit(12); }}>{label}</button>
+          ))}
+        </div>
+        <select aria-label="Sort donations" value={sortGifts} onChange={e => setSortGifts(e.target.value as "recent" | "high" | "low")}>
+          <option value="recent">Newest first</option><option value="high">Largest gifts</option><option value="low">Smallest gifts</option>
+        </select>
+      </div>}
       {tab === "donors" ? (
-        donations.length === 0 ? (
-          <p className="lc-none">No gifts yet. Yours could be the first.{canJoin && <> Or <Link href={`/${campaign.slug}/join`}>start an ambassador page</Link> and invite friends.</>}</p>
+        shownGifts.length === 0 ? (
+          <p className="lc-none">{donations.length === 0 ? "No gifts yet. Yours could be the first." : "No public gifts match this filter."}{canJoin && <> Or <Link href={`/${campaign.slug}/join`}>start an ambassador page</Link> and invite friends.</>}</p>
         ) : (
           <ul className="ls-gifts">
             {shownGifts.slice(0, limit).map((d) => {

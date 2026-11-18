@@ -4,6 +4,7 @@ import GiveCard from "@/components/GiveCard";
 import ShareBox from "@/components/ShareBox";
 import Supporters from "@/components/Community";
 import EventPoster from "@/components/EventPoster";
+import VolleyballLanding from "@/components/VolleyballLanding";
 import type { CampaignPage } from "@/lib/data";
 
 /** Poster wording for campaigns that are an event. Others use the campaign name. */
@@ -19,6 +20,7 @@ const EVENT: Record<string, { kind: "volleyball"; kicker: string; title: string;
 
 export default function CampaignLanding({ page }: { page: CampaignPage }) {
   const { campaign: c, total, donorCount } = page;
+  if (c.slug.toLowerCase() === "volley2027") return <VolleyballLanding page={page}/>;
   const live = c.status === "live";
   const draft = c.status === "draft";
   const ev = EVENT[c.slug.toLowerCase()];
