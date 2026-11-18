@@ -683,3 +683,7 @@ body:has(.vl) .site-footer{background:#0d1830;border-top:0;color:#c0c9d8}
 .vl-donation-bands button{cursor:pointer;border:1px solid #dadde2;background:#fff;color:#566172;font-size:11px;font-weight:750;padding:9px 12px;border-radius:24px}
 .vl-donation-bands button[aria-pressed=true]{background:#162c4d;color:#fff;border-color:#162c4d}
 .vl-donation-filters select{padding:9px 12px;border:1px solid #dadde2;background:#fff;color:#3e4e63;border-radius:9px;font-size:12px;min-width:140px}
+
+/* Four uncluttered gift choices make the Donate CTA the primary visual target. */
+.vl .vl-give .lc-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+.vl .vl-give .lc-tiles button{min-height:58px}
