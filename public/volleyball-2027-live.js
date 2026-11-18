@@ -59,11 +59,12 @@
   function updateAmount() {
     document.querySelectorAll("[data-amount]").forEach(b => b.classList.toggle("on",Number(b.dataset.amount) === state.amount));
     document.querySelectorAll("[data-period]").forEach(b => b.classList.toggle("on",b.dataset.period === state.period));
-    const label = "Donate " + dollars(state.amount) + (state.period === "monthly" ? " monthly" : "") + " →";
+    const label = "Donate " + dollars(state.amount) + (state.period === "monthly" ? " monthly" : state.period === "installments" ? " in installments" : "") + " →";
     const main = $("donate-main"), sticky = $("sticky-donate"), val = $("sticky-value");
-    if (main) { main.textContent = live ? label : "Donations are not open"; main.disabled = !live; }
-    if (sticky) { sticky.textContent = live ? label : "Donations are not open"; sticky.disabled = !live; }
-    if (val) val.textContent = dollars(state.amount);
+    const valid = state.amount >= 1 && state.amount <= 250000 && Number.isFinite(state.amount);
+    if (main) { main.textContent = live ? label : "Donations are not open"; main.disabled = !live || !valid; }
+    if (sticky) { sticky.textContent = live ? label : "Donations are not open"; sticky.disabled = !live || !valid; }
+    if (val) val.textContent = valid ? dollars(state.amount) : "Choose amount";
   }
   document.querySelectorAll("[data-amount]").forEach((button,i) => {
     if (i < choices.length) { button.dataset.amount = String(choices[i]); button.textContent = dollars(choices[i]); }
@@ -84,7 +85,7 @@
     if (custom.value !== "" && Number.isFinite(n) && n >= 1 && n <= 250000) {
       state.amount = Math.round(n * 100)/100; updateAmount();
       custom.setCustomValidity("");
-    } else if (custom.value) custom.setCustomValidity("Enter an amount between $1 and $250,000.");
+    } else if (custom.value) { state.amount = 0; custom.setCustomValidity("Enter an amount between $1 and $250,000."); updateAmount(); }
     else custom.setCustomValidity("");
   });
   for (const search of ["ambassador-search","team-search"]) {
