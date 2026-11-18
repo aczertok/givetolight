@@ -32,7 +32,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
             <summary style={{ cursor: "pointer", fontWeight: 600 }}>Change my password</summary>
             <div style={{ marginTop: 12 }}><SetPassword reset={false} next="" embedded /></div>
           </details>
-          <a className="btn ghost sm" style={{ justifySelf: "start" }} href="/auth/logout">Log out</a>
+          <form action="/auth/logout" method="post" style={{ justifySelf: "start" }}><button type="submit" className="btn ghost sm">Log out</button></form>
         </div>
       )}
     </main>
