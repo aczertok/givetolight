@@ -51,7 +51,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
         <div className="adm-foot">
           <Link href="/"><Icon d={I.globe} />View website</Link>
           <Link href="/account"><Icon d={I.user} />My account</Link>
-          <a href="/auth/logout"><Icon d={I.out} />Log out</a>
+          <form action="/auth/logout" method="post"><button type="submit" className="adm-logout"><Icon d={I.out} />Log out</button></form>
         </div>
       </aside>
       {open && <div className="adm-scrim" onClick={() => setOpen(false)} />}
