@@ -18,28 +18,29 @@ export default async function DonatePage({ params, searchParams }: { params: Pro
   }
   const amb = sp.a ? page.ambassadors.find((x) => x.slug === sp.a) : null;
   const team = sp.t ? page.teams.find((x) => x.slug === sp.t) : null;
-  const pct = c.goal ? Math.min(100, (page.total / c.goal) * 100) : null;
+  const displayedRaised = c.slug.toLowerCase() === "volley2027" ? page.raised : page.total;
+  const pct = c.goal ? Math.min(100, (displayedRaised / c.goal) * 100) : null;
   return (
     <div className="lc-checkout">
       <main>
         <div className="crumbs"><Link href={`/${c.slug}`}>← Back to {c.name}</Link></div>
         <h1>Complete your gift</h1>
         <DonateForm
-          campaign={{ slug: c.slug, name: c.name, match: c.match_multiplier, presets: c.preset_amounts }}
+          campaign={{ slug: c.slug, name: c.name, match: c.slug.toLowerCase() === "volley2027" ? 1 : c.match_multiplier, presets: c.preset_amounts }}
           ambassadors={page.ambassadors.map((a) => ({ slug: a.slug, name: a.name }))}
           teams={page.teams.map((t) => ({ slug: t.slug, name: t.name }))}
           initialAmbassador={sp.a || ""}
           initialTeam={sp.t || ""}
           chariotCid={process.env.NEXT_PUBLIC_CHARIOT_CID || ""}
           initialAmount={sp.amount && Number.isFinite(Number(sp.amount)) && Number(sp.amount) >= 1 && Number(sp.amount) <= 250000 ? Math.round(Number(sp.amount) * 100) / 100 : undefined}
-          initialPlan={sp.plan === "monthly" ? "monthly" : "once"}
+          initialPlan={sp.plan === "monthly" ? "monthly" : sp.plan === "installments" ? "installments" : "once"}
         />
       </main>
       <aside className="lc-sum">
         <div className="lc-sum-card">
           <small>{amb ? `Supporting ${amb.name}` : team ? `Supporting team ${team.name}` : "You're supporting"}</small>
           <h2>{c.name}</h2>
-          <div className="lc-raised num">{money(page.total)}</div>
+          <div className="lc-raised num">{money(displayedRaised)}</div>
           {c.goal ? <small className="num">raised of {money(c.goal)} · {page.donorCount.toLocaleString()} donors</small> : <small className="num">{page.donorCount.toLocaleString()} donors so far</small>}
           {pct !== null && <div className="lc-track" aria-hidden="true"><i style={{ width: `${Math.max(pct, 1.5).toFixed(1)}%` }} /></div>}
         </div>
