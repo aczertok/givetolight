@@ -19,7 +19,7 @@ type Props = {
 
 export default function GiveCard({ slug, presets, matchMultiplier, matchingAvailable, daf, credit, title = "Make your gift", oneTimeOnly = false }: Props) {
   const clean = [...new Set(presets.filter((n) => Number.isFinite(n) && n >= 1 && n <= 250000))].slice(0, 6);
-  const tiles = clean.length >= 3 ? clean : [72, 180, 360, 500, 1000, 1800];
+  const tiles = clean.length >= 3 ? (oneTimeOnly ? clean.slice(0, 4) : clean) : (oneTimeOnly ? [72, 180, 360, 1000] : [72, 180, 360, 500, 1000, 1800]);
   const [picked, setPicked] = useState(tiles[Math.min(1, tiles.length - 1)]);
   const [custom, setCustom] = useState("");
   const [plan, setPlan] = useState<"once" | "monthly">("once");
@@ -68,7 +68,8 @@ export default function GiveCard({ slug, presets, matchMultiplier, matchingAvail
               value={custom} onChange={(e) => setCustom(e.target.value)} />
             {effectivePlan === "monthly" && <em>/ month</em>}
           </label>
-          {match && valid && (
+          {match && valid && (oneTimeOnly ?
+            <p className="lc-impact num">Matching available up to {matchMultiplier}× for eligible gifts, while funds remain.</p> :
             <p className="lc-impact num">You give <b>{money(amount)}</b> <span aria-hidden="true">→</span> the campaign receives <b>{money(amount * matchMultiplier)}</b></p>
           )}
           {valid ? (
