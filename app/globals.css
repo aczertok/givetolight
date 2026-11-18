@@ -687,3 +687,152 @@ body:has(.vl) .site-footer{background:#0d1830;border-top:0;color:#c0c9d8}
 /* Four uncluttered gift choices make the Donate CTA the primary visual target. */
 .vl .vl-give .lc-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
 .vl .vl-give .lc-tiles button{min-height:58px}
+
+
+/* Volleyball 2027 - flyer-inspired event identity, donation remains primary */
+body:has(.vf){background:#f8f5f0}
+body:has(.vf) .site-header{background:#4b0c27;border-bottom:1px solid #ffffff22}
+body:has(.vf) .site-header .wrap{max-width:1280px}
+body:has(.vf) .site-header .brand{color:#fff}
+body:has(.vf) .site-header .brand small{color:#efd5dc}
+body:has(.vf) .site-nav a{color:#f6e8ed}
+body:has(.vf) .site-nav a:hover{background:#ffffff22;color:#fff}
+body:has(.vf) .site-footer{background:#420b27;color:#ead6de;border-top:0}
+.vf{--vf-maroon:#710c2a;--vf-burgundy:#8c1230;--vf-ink:#3e1027;--vf-gold:#ffc42f;--vf-cream:#fffaf6;--lc-paper:#f8f5f0;--lc-card:#fff;--lc-ink:#42102c;--lc-muted:#746a70;--lc-line:#e9dcda;--lc-soft:#f8f1ed;background:#f8f5f0;color:#2c2533}
+.vf .lc-give{--lc-night:#6d0b2c;--lc-gold:#ffc42f;--lc-gold2:#ffe07d;--lc-gold-ink:#470d29;--lc-card:#fff;--lc-ink:#50152e;--lc-muted:#70646c;--lc-line:#eadbd9;--lc-soft:#f9f1ee}
+.vf-match-banner{display:flex;justify-content:center;align-items:center;gap:13px;flex-wrap:wrap;padding:10px 20px;background:#ffda71;color:#5e2130;font-size:12px}
+.vf-match-banner strong{letter-spacing:.11em}
+.vf-masthead{background:radial-gradient(ellipse at 15% 5%,#f45c1d 0%,transparent 39%),linear-gradient(120deg,#9d1938 0%,#6a0b30 70%,#4e0828 100%);padding:0 22px 50px;position:relative;isolation:isolate}
+.vf-masthead:after{content:"";position:absolute;pointer-events:none;left:-10%;right:-10%;bottom:10px;height:42px;border-bottom:5px solid #ffbf35;border-radius:50%;transform:rotate(-1.5deg);opacity:.63;z-index:-1}
+.vf-hero{position:relative;min-height:317px;max-width:1290px;margin:0 auto;padding:36px clamp(20px,4vw,52px) 35px;color:#fff;display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);gap:12px;align-items:center;overflow:hidden}
+.vf-hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(120deg,transparent 0 140px,#ffae3610 142px 147px,transparent 150px 260px);pointer-events:none}
+.vf-hero-copy{position:relative;z-index:2;align-self:center;min-width:0}
+.vf-hero-overline{display:inline-block;background:#ffcd36;color:#71152c;font-size:11px;letter-spacing:.09em;font-weight:950;padding:8px 12px;transform:rotate(-2deg);margin:0 0 17px}
+.vf-hero h1{font-family:system-ui,Arial,sans-serif;color:#fff;font-size:clamp(42px,5vw,75px);font-style:italic;font-weight:1000;line-height:.91;letter-spacing:-.073em;margin:0 0 13px;text-shadow:4px 5px 0 #460c27}
+.vf-hero h1>span{display:block;white-space:nowrap}
+.vf-hero h1>span:nth-child(2){color:#ffdb70}
+.vf-hero-brush{display:flex;align-items:center;gap:20px;flex-wrap:wrap;transform:rotate(-1deg);margin:8px 0 10px}
+.vf-hero-brush strong{background:#ffc62c;color:#6b102a;padding:6px 15px;font-size:clamp(19px,2.4vw,30px);font-style:italic;font-weight:1000;letter-spacing:-.035em;box-shadow:9px 0 0 #f7a823}
+.vf-hero-brush em{font-family:system-ui,Arial,sans-serif;font-size:clamp(19px,2.5vw,30px);font-weight:950;color:#ffcf3e;font-style:normal}
+.vf-event-intro{font-size:13px;color:#fff0df;line-height:1.55;max-width:510px;margin:15px 0}
+.vf-event-badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.vf-event-badges span{padding:7px 11px;border:1px solid #ffc65888;border-radius:60px;font-size:10px;letter-spacing:.055em;font-weight:850;background:#360d2975;color:#fff5ea}
+.vf-hero-art{position:relative;z-index:1;height:clamp(230px,23vw,330px);width:100%;max-width:660px;overflow:visible}
+.vf-illustration{display:block;width:100%;height:100%;filter:drop-shadow(0 15px 28px #29061955)}
+.vf-hero-donate-jump{position:absolute;right:15px;bottom:13px;font-size:11px;font-weight:850;color:#ffe8af!important;text-decoration:none;letter-spacing:.08em;z-index:3}
+.vf-hero-donate-jump:hover{text-decoration:underline}
+.vf-donation-band{max-width:1250px;margin:-7px auto 0;position:relative;z-index:4;display:grid;grid-template-columns:minmax(0,.92fr) minmax(350px,1.08fr);gap:clamp(24px,4vw,65px);align-items:center;background:#fffaf6;border-radius:19px;padding:clamp(23px,3.3vw,43px) clamp(24px,4.1vw,50px);box-shadow:0 23px 60px #1c031b5c,0 0 0 1px #fff8f6;min-width:0}
+.vf-tally{min-width:0}
+.vf-label{font-size:11px;letter-spacing:.12em;color:#932342;font-weight:900}
+.vf-total{font-family:system-ui,Arial,sans-serif;font-size:clamp(49px,5.6vw,76px);line-height:1.02;letter-spacing:-.065em;color:#620d2c;font-weight:950;margin:16px 0 3px}
+.vf-total-sub{font-size:15px;color:#73686c;font-weight:600}
+.vf-total-sub strong{color:#5e253a}
+.vf-progress{height:13px;background:#ebdfd9;border-radius:15px;overflow:hidden;margin-top:20px}
+.vf-progress>div{height:100%;border-radius:15px;background:linear-gradient(90deg,#ffc533,#ee8a29,#ab1647);transition:width .25s}
+.vf-progress-legend{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:11px 0 0;color:#796e72;font-size:12px}
+.vf-progress-legend b{color:#9d1943;font-size:15px}
+.vf-proof{display:flex;gap:20px 29px;flex-wrap:wrap;margin-top:28px;padding-top:20px;border-top:1px solid #e8dcd7}
+.vf-proof span{color:#756974;font-size:11px}
+.vf-proof b{display:block;font-weight:900;font-size:22px;color:#621730}
+.vf-supporters-jump{display:inline-flex;align-items:center;gap:10px;color:#921c47!important;font-size:12px;font-weight:850;margin-top:23px;text-decoration:none}
+.vf-supporters-jump:hover{text-decoration:underline}
+.vf-gift-column{min-width:0}
+.vf .vf-gift-column .vl-give{box-shadow:none;border-radius:0;background:transparent;overflow:visible;outline:0}
+.vf .vf-gift-column .lc-give-body{padding:3px 0 0;gap:12px}
+.vf .vf-gift-column .lc-give h2{font-family:system-ui,Arial,sans-serif;font-size:clamp(24px,2.8vw,32px);font-weight:950;letter-spacing:-.05em;color:#651230;margin:0 0 2px}
+.vf .vf-gift-column .lc-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.vf .vf-gift-column .lc-tiles button{border:1.5px solid #d8c5bf;min-height:54px;border-radius:10px;font-weight:850;font-size:18px;background:#fff;color:#60172f;transition:transform .15s,border-color .15s}
+.vf .vf-gift-column .lc-tiles button:hover{border-color:#9f1e47;transform:translateY(-1px)}
+.vf .vf-gift-column .lc-tiles button[aria-pressed=true]{background:#7b0f33;border-color:#7b0f33;box-shadow:0 0 0 2px #ffc42f;color:#fff}
+.vf .vf-gift-column .lc-tiles button[aria-pressed=true] small{color:#ffe2a2}
+.vf .vf-gift-column .lc-tiles button small{color:#97707e}
+.vf .vf-gift-column .lc-other{border:1.5px solid #d8c5bf;border-radius:10px;background:#fff;min-height:49px;color:#60172f}
+.vf .vf-gift-column .lc-other input{font-size:15px}
+.vf .vf-gift-column .lc-cta{background:linear-gradient(180deg,#ffdb59,#ffc32b);color:#53102a;min-height:66px;border-radius:11px;box-shadow:0 4px 0 #d89a18;font-family:system-ui,Arial,sans-serif;font-weight:1000;font-size:21px;letter-spacing:-.02em;border:0}
+.vf .vf-gift-column .lc-cta:hover{filter:brightness(1.04)}
+.vf .vf-gift-column .lc-cta svg{width:22px;height:22px}
+.vf .vf-gift-column .lc-impact{background:#fff0d2;color:#6b4125;border-radius:8px;font-size:11px}
+.vf .vf-gift-column .lc-trust{color:#776f74;font-size:11px}
+.vf .vl-sticky{background:#5f0d2b}
+.vf .vl-sticky .lc-bar-amt small{color:#ffe39c}
+.vf .vl-sticky .lc-cta{background:#ffca36;color:#541229;font-weight:950}
+.vf-lineup{background:#27152c;color:#fff;border-top:1px solid #f3b34529;border-bottom:2px solid #df802e}
+.vf-lineup-inner{max-width:1190px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:18px 26px}
+.vf-lineup-inner>div{display:flex;align-items:center;gap:16px;padding:7px 19px 7px 0;border-right:1px solid #ffffff25}
+.vf-lineup-inner>div:last-child{border:0}
+.vf-lineup-num{font-size:25px;font-weight:900;font-style:italic;color:#ffc53f}
+.vf-lineup-inner strong{font-size:12px;font-weight:900;letter-spacing:.065em;display:block}
+.vf-lineup-inner small{font-size:11px;color:#e6b8c8;display:block;margin-top:3px}
+.vf-community{padding-top:65px;padding-bottom:45px}
+.vf-section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.vf-section-heading span,.vf-about>div>span{font-size:11px;font-weight:900;letter-spacing:.14em;color:#a41b4d}
+.vf-section-heading h2,.vf-about h2{font-family:system-ui,Arial,sans-serif;font-size:clamp(28px,3.2vw,41px);letter-spacing:-.055em;font-weight:950;margin:9px 0 0;color:#4a1430}
+.vf-section-heading a{font-size:12px;font-weight:850;color:#a31d4f;text-decoration:none}
+.vf .ls{background:#fff;border:1px solid #e9dedd;border-radius:17px;box-shadow:0 12px 35px #37172a0b}
+.vf .lc-seg button[aria-selected=true]{background:#771232;color:#fff}
+.vf .lc-seg button[aria-selected=true] span{color:#751635;background:#ffe7c2}
+.vf .ls-card:hover{background:#fff2ed}
+.vf .vl-donation-bands button[aria-pressed=true]{background:#711336;border-color:#711336}
+.vf-about{display:grid;grid-template-columns:minmax(210px,.72fr) 1.28fr;gap:30px;padding:37px 32px 55px;margin-bottom:45px;background:#fff;border-radius:16px}
+.vf-about p{color:#73666e;line-height:1.75;font-size:14px;margin:0 0 13px}
+.vf-ambassadors{background:radial-gradient(ellipse at 14% 0%,#dc4f24 0%,transparent 45%),linear-gradient(115deg,#861339,#4f0c30);padding:70px 24px 83px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.vf-ambassadors:before{content:"";position:absolute;top:-130px;left:0;width:100%;height:160px;border-bottom:6px solid #ffbe30;border-radius:50%;transform:rotate(-3deg);opacity:.83}
+.vf-ambassadors-inner{max-width:720px;margin:auto;position:relative}
+.vf-ambassadors-kicker{font-size:11px;color:#ffcd45;letter-spacing:.2em;font-weight:900}
+.vf-ambassadors h2{color:#fff;font-family:system-ui,Arial,sans-serif;font-size:clamp(35px,5.2vw,64px);font-weight:950;font-style:italic;line-height:1.05;letter-spacing:-.055em;margin:18px 0 13px;text-shadow:3px 3px 0 #420d2c}
+.vf-ambassadors h2 em{color:#ffcc3e}
+.vf-ambassadors p{font-size:16px;color:#f1dce3;max-width:530px;line-height:1.55;margin:0 auto 26px}
+.vf-ambassadors-button{display:inline-flex;align-items:center;justify-content:center;gap:18px;border-radius:11px;padding:20px 31px;background:#ffc831;color:#51102c;text-decoration:none;font-weight:950;font-size:clamp(17px,2vw,23px);box-shadow:0 4px 0 #d29722}
+.vf-ambassadors-button:hover{background:#ffdf78}
+.vf-share{padding-top:34px;padding-bottom:75px}
+.vf-share .panel{border-radius:14px}
+@media(max-width:900px){
+ .vf-hero{grid-template-columns:1fr .75fr;min-height:310px}
+ .vf-hero-art{height:265px}
+ .vf-hero h1{font-size:clamp(42px,5.7vw,63px)}
+ .vf-donation-band{grid-template-columns:1fr;gap:28px;margin-top:0}
+ .vf-gift-column{max-width:680px;width:100%}
+ .vf-proof{margin-top:19px}
+}
+@media(max-width:640px){
+ .vf-masthead{padding:0 12px 20px}
+ .vf-hero{grid-template-columns:1fr;display:block;min-height:0;padding:20px 11px 12px;overflow:hidden}
+ .vf-hero-copy{position:relative;z-index:2}
+ .vf-hero-overline{font-size:9px;padding:7px 9px;margin-bottom:13px}
+ .vf-hero h1{font-size:clamp(36px,10vw,55px);margin:0 0 12px}
+ .vf-hero-brush{gap:9px}
+ .vf-hero-brush strong{font-size:clamp(18px,6vw,24px);padding:6px 11px}
+ .vf-hero-brush em{font-size:22px}
+ .vf-event-intro{font-size:12px;margin:14px 0 12px}
+ .vf-event-badges{gap:5px;margin-top:12px}
+ .vf-event-badges span{font-size:9px;padding:6px 8px}
+ .vf-hero-art{height:150px;width:100%;margin-top:-6px;overflow:hidden}
+ .vf-illustration{height:225px;transform:translateY(-28px);width:100%}
+ .vf-hero-donate-jump{position:static;display:inline-flex;padding:9px 0 5px;font-size:11px}
+ .vf-donation-band{margin:0 auto;grid-template-columns:1fr;gap:21px;padding:22px 17px 25px;border-radius:15px}
+ .vf-total{font-size:clamp(43px,12vw,59px);margin-top:10px}
+ .vf-total-sub{font-size:13px}
+ .vf-progress{margin-top:13px;height:11px}
+ .vf-proof{gap:14px 22px;padding-top:14px;margin-top:15px}
+ .vf-proof b{font-size:19px}
+ .vf-supporters-jump{margin-top:12px}
+ .vf .vf-gift-column .lc-give-body{padding:0;gap:12px}
+ .vf .vf-gift-column .lc-give h2{font-size:27px}
+ .vf .vf-gift-column .lc-tiles button{min-height:52px;font-size:17px}
+ .vf .vf-gift-column .lc-cta{min-height:61px;font-size:19px}
+ .vf-lineup-inner{grid-template-columns:1fr;padding:15px 23px;gap:0}
+ .vf-lineup-inner>div{padding:11px 0;border-right:0;border-bottom:1px solid #ffffff25}
+ .vf-lineup-inner>div:last-child{border-bottom:0}
+ .vf-lineup-num{font-size:21px}
+ .vf-community{padding-top:35px;padding-bottom:30px}
+ .vf-section-heading h2{font-size:30px}
+ .vf-about{grid-template-columns:1fr;padding:25px 20px;margin:0 14px 30px}
+ .vf-ambassadors{padding:60px 16px 70px}
+ .vf-ambassadors h2{font-size:clamp(34px,9.2vw,46px)}
+ .vf-ambassadors p{font-size:14px}
+ .vf-ambassadors-button{width:100%;font-size:16px;padding:18px 12px}
+ .vf-share{padding-bottom:125px}
+ .vf .vl-sticky .lc-bar-amt{display:none}
+ .vf .vl-sticky .lc-cta{min-height:59px;font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){.vf .vf-gift-column .lc-tiles button,.vf-progress>div{transition:none}}
