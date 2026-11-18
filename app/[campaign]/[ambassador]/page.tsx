@@ -28,7 +28,7 @@ export default async function AmbassadorPage({ params }: { params: Promise<{ cam
   const { page, a } = r;
   const c = page.campaign;
   const mine = page.donations.filter((d) => d.ambassador_id === a.id);
-  const raised = a.raised * page.factor;
+  const raised = a.raised * (c.slug.toLowerCase() === "volley2027" ? 1 : page.factor);
   const team = a.team_id ? page.teams.find((t) => t.id === a.team_id) : null;
   return (
     <>
@@ -38,7 +38,7 @@ export default async function AmbassadorPage({ params }: { params: Promise<{ cam
             <div className="crumbs"><Link href={`/${c.slug}`}>{c.name}</Link>{team && <> · <Link href={`/${c.slug}/team/${team.slug}`}>{team.name}</Link></>}</div>
             {a.photo_url ? <img className="photo-lg" src={a.photo_url} alt="" /> : <div style={{ marginBottom: 14 }}><Avatar name={a.name} size={88} /></div>}
             <h1>{a.name}</h1>
-            {c.match_multiplier > 1 && <span className="match-tag">×{c.match_multiplier} matched</span>}
+            {c.slug.toLowerCase() !== "volley2027" && c.match_multiplier > 1 && <span className="match-tag">×{c.match_multiplier} matched</span>}
           </div>
           <aside className="tally">
             <div>
